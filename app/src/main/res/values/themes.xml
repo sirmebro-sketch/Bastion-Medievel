@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Compose draws everything; the window only needs the frame color to avoid a white flash. -->
+    <style name="Theme.Bastion" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/leather</item>
+    </style>
+</resources>

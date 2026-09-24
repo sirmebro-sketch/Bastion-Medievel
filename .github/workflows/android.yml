@@ -1,0 +1,180 @@
+name: Android-APK
+
+# Every push builds a tested APK.
+# - main: the real app (de.bastion.medieval), signed with the release key from the
+#   repository secrets and published as a GitHub release for easy download.
+#   Without those secrets it falls back to a beta build, so there is always an APK.
+# - any other branch: a beta app (de.bastion.medieval.beta, "Bastion Beta") signed with
+#   the public test key in signing/, installable next to the real app.
+on:
+  push:
+    branches-ignore: [ci-screenshots]
+  workflow_dispatch:
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-37 build-tools;36.0.0'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Choose signing key
+        id: signing
+        env:
+          IS_MAIN: ${{ github.ref == 'refs/heads/main' }}
+          KEYSTORE_BASE64: ${{ secrets.BASTION_KEYSTORE_BASE64 }}
+          RAW_KEYSTORE_PASSWORD: ${{ secrets.BASTION_KEYSTORE_PASSWORD }}
+          RAW_KEY_ALIAS: ${{ secrets.BASTION_KEY_ALIAS }}
+          RAW_KEY_PASSWORD: ${{ secrets.BASTION_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          # Secrets copied from a text file may end with a line break.
+          trim() { local v="$1"; while [[ "$v" == *$'\n' || "$v" == *$'\r' ]]; do v="${v%?}"; done; printf '%s' "$v"; }
+          if [[ "$IS_MAIN" == "true" && -n "$KEYSTORE_BASE64" && -n "$RAW_KEYSTORE_PASSWORD" && -n "$RAW_KEY_ALIAS" && -n "$RAW_KEY_PASSWORD" ]]; then
+            umask 077
+            printf '%s' "$KEYSTORE_BASE64" | tr -d '\r\n\t ' | base64 --decode > "$RUNNER_TEMP/release.jks" || {
+              echo "::error::BASTION_KEYSTORE_BASE64 is not valid base64."; exit 1; }
+            export STORE_PASSWORD="$(trim "$RAW_KEYSTORE_PASSWORD")"
+            keytool -exportcert -keystore "$RUNNER_TEMP/release.jks" -alias "$(trim "$RAW_KEY_ALIAS")" \
+              -storepass:env STORE_PASSWORD -file "$RUNNER_TEMP/release.der" > /dev/null || {
+              echo "::error::The keystore cannot be opened with BASTION_KEYSTORE_PASSWORD and BASTION_KEY_ALIAS."; exit 1; }
+            ACTUAL=$(sha256sum "$RUNNER_TEMP/release.der" | cut -d ' ' -f 1)
+            EXPECTED=$(tr -d '\r\n ' < signing/release-certificate-sha256.txt)
+            [[ "$ACTUAL" == "$EXPECTED" ]] || { echo "::error::The release key does not match signing/release-certificate-sha256.txt."; exit 1; }
+            echo "beta=false" >> "$GITHUB_OUTPUT"
+            echo "pin=signing/release-certificate-sha256.txt" >> "$GITHUB_OUTPUT"
+          else
+            if [[ "$IS_MAIN" == "true" ]]; then
+              echo "::warning title=Release key missing::The BASTION_* secrets are not set, so main is built as a beta app. See README."
+            fi
+            echo "beta=true" >> "$GITHUB_OUTPUT"
+            echo "pin=signing/beta-certificate-sha256.txt" >> "$GITHUB_OUTPUT"
+          fi
+          # Grows with time across all workflows, so every APK installs over the previous one.
+          echo "versionCode=$(( ($(date +%s) - 1767225600) / 60 ))" >> "$GITHUB_OUTPUT"
+
+      - name: Engine tests
+        run: ./gradlew -p engine test
+
+      - name: App tests and screenshots
+        run: ./gradlew :app:recordRoborazziDebug
+
+      - name: Build APK
+        env:
+          BETA: ${{ steps.signing.outputs.beta }}
+          RAW_KEYSTORE_PASSWORD: ${{ secrets.BASTION_KEYSTORE_PASSWORD }}
+          RAW_KEY_ALIAS: ${{ secrets.BASTION_KEY_ALIAS }}
+          RAW_KEY_PASSWORD: ${{ secrets.BASTION_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          trim() { local v="$1"; while [[ "$v" == *$'\n' || "$v" == *$'\r' ]]; do v="${v%?}"; done; printf '%s' "$v"; }
+          if [[ "$BETA" == "false" ]]; then
+            export BASTION_KEYSTORE_PATH="$RUNNER_TEMP/release.jks"
+            export BASTION_KEYSTORE_PASSWORD="$(trim "$RAW_KEYSTORE_PASSWORD")"
+            export BASTION_KEY_ALIAS="$(trim "$RAW_KEY_ALIAS")"
+            export BASTION_KEY_PASSWORD="$(trim "$RAW_KEY_PASSWORD")"
+          fi
+          ./gradlew :app:assembleRelease \
+            -Pbastion.beta="$BETA" \
+            -Pbastion.buildNumber=${{ github.run_number }} \
+            -Pbastion.versionCode=${{ steps.signing.outputs.versionCode }}
+
+      - name: Check signature and permissions
+        id: apk
+        env:
+          PIN: ${{ steps.signing.outputs.pin }}
+          BETA: ${{ steps.signing.outputs.beta }}
+        run: |
+          set -euo pipefail
+          APK=app/build/outputs/apk/release/app-release.apk
+          test -s "$APK"
+          BUILD_TOOLS="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
+          "$BUILD_TOOLS/apksigner" verify --print-certs "$APK" > "$RUNNER_TEMP/signature.txt"
+          ACTUAL=$(sed -n 's/^Signer #1 certificate SHA-256 digest: //p' "$RUNNER_TEMP/signature.txt" | tr -d '\r\n ')
+          EXPECTED=$(tr -d '\r\n ' < "$PIN")
+          [[ "$ACTUAL" == "$EXPECTED" ]] || { echo "::error::APK is signed with an unexpected key."; exit 1; }
+          "$BUILD_TOOLS/aapt2" dump permissions "$APK" | tee "$RUNNER_TEMP/permissions.txt"
+          if grep -q "android.permission.INTERNET" "$RUNNER_TEMP/permissions.txt"; then
+            echo "::error::The APK requests internet access, but the game must stay offline."; exit 1
+          fi
+          VERSION=$(grep '^bastion.versionName=' gradle.properties | cut -d= -f2)
+          if [[ "$BETA" == "true" ]]; then NAME="Bastion-Beta-${VERSION}-${{ github.run_number }}.apk"; else NAME="Bastion-Medieval-${VERSION}-${{ github.run_number }}.apk"; fi
+          mkdir -p dist
+          cp "$APK" "dist/$NAME"
+          echo "file=dist/$NAME" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bastion-apk-${{ github.run_number }}
+          path: |
+            dist/*.apk
+            app/build/outputs/roborazzi/*.png
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish release on main
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FILE: ${{ steps.apk.outputs.file }}
+          VERSION: ${{ steps.apk.outputs.version }}
+          BETA: ${{ steps.signing.outputs.beta }}
+        run: |
+          set -euo pipefail
+          TAG="build-${{ github.run_number }}"
+          TITLE="Bastion Medieval ${VERSION} (Build ${{ github.run_number }})"
+          FLAGS=()
+          if [[ "$BETA" == "true" ]]; then
+            TITLE="$TITLE – Beta-Signatur"
+            FLAGS+=(--prerelease)
+          fi
+          {
+            echo "APK zum Installieren auf Android: **$(basename "$FILE")**"
+            echo
+            echo "Commit: ${GITHUB_SHA::7} – $(git log -1 --format=%s)"
+          } > "$RUNNER_TEMP/notes.md"
+          gh release create "$TAG" "$FILE" --target "$GITHUB_SHA" --title "$TITLE" --notes-file "$RUNNER_TEMP/notes.md" "${FLAGS[@]}"
+
+      - name: Publish screenshots to the ci-screenshots branch
+        if: always() && hashFiles('app/build/outputs/roborazzi/*.png') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          SHOTS="$RUNNER_TEMP/shots"
+          rm -rf "$SHOTS" && mkdir -p "$SHOTS"
+          cp app/build/outputs/roborazzi/*.png "$SHOTS/"
+          cd "$SHOTS"
+          printf 'Screenshots of %s on %s (run %s). Generated by CI; overwritten on every push.\n' \
+            "$GITHUB_SHA" "$GITHUB_REF_NAME" "${{ github.run_number }}" > README.md
+          git init -q -b ci-screenshots
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" add .
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Screenshots for ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:ci-screenshots
+
+      - name: Remove key from runner
+        if: always()
+        run: rm -f "$RUNNER_TEMP/release.jks" "$RUNNER_TEMP/release.der"

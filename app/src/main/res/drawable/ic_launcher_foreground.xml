@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A bastion tower under three stars, inside the 66dp safe zone of the 108dp adaptive icon. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFD9B45A"
+        android:fillType="evenOdd"
+        android:pathData="M36,33 L42,33 L42,38 L46,38 L46,33 L52,33 L52,38 L56,38 L56,33 L62,33 L62,38 L66,38 L66,33 L72,33 L72,43 L69,43 L69,79 L39,79 L39,43 L36,43 Z
+            M48,79 L48,66 A6,6 0 0,1 60,66 L60,79 Z
+            M53,48 L55,48 L55,57 L53,57 Z" />
+    <path
+        android:fillColor="#FFD9B45A"
+        android:pathData="M31,79 L77,79 L77,82 L31,82 Z" />
+    <path
+        android:fillColor="#FFD9B45A"
+        android:pathData="M44,22 L46,25.5 L44,29 L42,25.5 Z M54,20 L56,23.5 L54,27 L52,23.5 Z M64,22 L66,25.5 L64,29 L62,25.5 Z" />
+</vector>

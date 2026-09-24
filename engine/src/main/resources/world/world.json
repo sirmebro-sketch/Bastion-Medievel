@@ -1,0 +1,236 @@
+{
+  "title": { "de": "Bastion Medieval", "en": "Bastion Medieval" },
+  "intro": {
+    "de": "Seit drei Tagen folgst du der alten Heerstraße nach Norden. Man hat dir von der Bastion erzählt – einer Festung am Rand der bekannten Lande, deren Tor seit einem Menschenalter verschlossen ist. Niemand im Süden konnte dir sagen, warum. Jetzt senkt sich die Dämmerung, und Nebel kriecht aus den Senken.",
+    "en": "For three days you have followed the old military road north. You were told of the Bastion – a fortress at the edge of the known lands whose gate has been shut for a lifetime. No one in the south could tell you why. Now dusk is falling, and mist creeps out of the hollows."
+  },
+  "start": "crossroads",
+  "locations": [
+    {
+      "id": "crossroads",
+      "name": { "de": "Kreuzweg im Nebel", "en": "Crossroads in the Mist" },
+      "description": {
+        "de": "Vier Wege treffen sich hier an einem verwitterten Wegstein. Nebel liegt schwer über dem Heidekraut, und irgendwo ruft ein Käuzchen. Im Norden steigt ein Hohlweg zu einer dunklen Anhöhe an. Im Osten flackern die Lichter eines Dorfes, im Westen steht der Wald wie eine schwarze Wand.",
+        "en": "Four roads meet here at a weathered waystone. Mist lies heavy over the heather, and somewhere an owl calls. To the north a sunken lane climbs toward a dark rise. To the east the lights of a village flicker; to the west the forest stands like a black wall."
+      },
+      "exits": [
+        { "direction": "north", "to": "sunken_lane", "keywords": { "de": ["Hohlweg", "Anhöhe"], "en": ["lane", "rise"] } },
+        { "direction": "east", "to": "village_square", "keywords": { "de": ["Dorf", "Lichter"], "en": ["village", "lights"] } },
+        { "direction": "west", "to": "forest_edge", "keywords": { "de": ["Wald"], "en": ["forest", "woods"] } }
+      ],
+      "items": ["waystone"]
+    },
+    {
+      "id": "sunken_lane",
+      "name": { "de": "Hohlweg", "en": "Sunken Lane" },
+      "description": {
+        "de": "Der Weg hat sich tief in den Hang gegraben. Wurzeln hängen wie knochige Finger aus den Böschungen. Weiter oben im Norden zeichnen sich Mauern gegen den Himmel ab – die Bastion. Im Süden liegt der Kreuzweg.",
+        "en": "The lane has cut deep into the hillside. Roots hang from the banks like bony fingers. Further up to the north, walls stand out against the sky – the Bastion. To the south lies the crossroads."
+      },
+      "exits": [
+        { "direction": "north", "to": "bastion_gate", "keywords": { "de": ["Bastion", "Mauern", "Festung"], "en": ["bastion", "walls", "fortress"] } },
+        { "direction": "south", "to": "crossroads", "keywords": { "de": ["Kreuzweg"], "en": ["crossroads"] } }
+      ],
+      "items": ["broken_arrow"]
+    },
+    {
+      "id": "bastion_gate",
+      "name": { "de": "Vor dem Tor der Bastion", "en": "Before the Bastion Gate" },
+      "description": {
+        "de": "Die Mauern der Bastion ragen so hoch auf, dass ihr oberer Rand im Nebel verschwindet. Das Tor ist aus schwarzem Eichenholz und mit Eisen beschlagen; ein schweres Schloss hält es verschlossen. Darüber ist ein Wappen in den Stein gemeißelt. Der Hohlweg führt nach Süden zurück.",
+        "en": "The walls of the Bastion rise so high that their upper edge vanishes into the mist. The gate is black oak bound with iron, and a heavy lock keeps it shut. Above it a crest is carved into the stone. The sunken lane leads back south."
+      },
+      "exits": [
+        {
+          "direction": "north",
+          "to": "courtyard",
+          "keywords": { "de": ["Tor", "Bastion", "Festung", "Innenhof"], "en": ["gate", "bastion", "fortress", "courtyard"] },
+          "requires": "rusty_key",
+          "locked": {
+            "de": "Du rüttelst am Tor, doch das Schloss gibt nicht nach. Es ist alt und verrostet – aber ohne Schlüssel kommst du hier nicht hinein.",
+            "en": "You rattle the gate, but the lock does not yield. It is old and rusted – yet without a key you will not get in."
+          },
+          "unlock": {
+            "de": "Der rostige Schlüssel passt. Mit einem Knirschen, das dir durch Mark und Bein geht, dreht er sich im Schloss. Langsam schwingt das Tor auf.",
+            "en": "The rusty key fits. With a grinding that goes right through you, it turns in the lock. Slowly the gate swings open."
+          }
+        },
+        { "direction": "south", "to": "sunken_lane", "keywords": { "de": ["Hohlweg"], "en": ["lane"] } }
+      ],
+      "items": ["crest"]
+    },
+    {
+      "id": "courtyard",
+      "name": { "de": "Innenhof der Bastion", "en": "Courtyard of the Bastion" },
+      "description": {
+        "de": "Stille. Der Innenhof ist von Moos überwuchert. In seiner Mitte steht die steinerne Statue eines Ritters, und auf den Wehrgängen rührt sich nichts – und doch fühlst du dich beobachtet. (Hier endet das Testgebiet. Die eigentliche Geschichte der Bastion wird noch geschrieben.)",
+        "en": "Silence. The courtyard is overgrown with moss. In its middle stands the stone statue of a knight, and nothing stirs on the battlements – and yet you feel watched. (This is where the test area ends. The actual story of the Bastion is still being written.)"
+      },
+      "exits": [
+        { "direction": "south", "to": "bastion_gate", "keywords": { "de": ["Tor"], "en": ["gate"] } }
+      ],
+      "items": ["statue"]
+    },
+    {
+      "id": "village_square",
+      "name": { "de": "Dorfplatz von Ebersfurt", "en": "Ebersfurt Village Square" },
+      "description": {
+        "de": "Ein paar windschiefe Fachwerkhäuser drängen sich um einen Platz aus festgetretenem Lehm. Die meisten Fensterläden sind geschlossen. Nur aus der Schänke im Norden fällt warmes Licht, und Stimmen dringen heraus. Neben dem Brunnentrog hängt eine Anschlagtafel. Nach Westen geht es zurück zum Kreuzweg.",
+        "en": "A few crooked half-timbered houses huddle around a square of trampled clay. Most shutters are closed. Only from the tavern to the north does warm light fall, and voices drift out. A notice board hangs beside the water trough. To the west the road leads back to the crossroads."
+      },
+      "exits": [
+        { "direction": "north", "to": "tavern", "keywords": { "de": ["Schänke", "Wirtshaus", "Taverne", "Gasthaus", "Krummen", "Horn"], "en": ["tavern", "inn", "crooked", "horn"] } },
+        { "direction": "west", "to": "crossroads", "keywords": { "de": ["Kreuzweg"], "en": ["crossroads"] } },
+        { "direction": "in", "to": "tavern", "keywords": { "de": ["Schänke", "Wirtshaus", "Taverne", "Gasthaus"], "en": ["tavern", "inn"] } }
+      ],
+      "items": ["notice_board"]
+    },
+    {
+      "id": "tavern",
+      "name": { "de": "Schänke „Zum Krummen Horn“", "en": "The Crooked Horn Tavern" },
+      "description": {
+        "de": "Rauch von Torffeuer hängt unter den niedrigen Balken. Ein paar Bauern sitzen schweigend über ihren Krügen und mustern dich. Hinter dem Schanktisch wischt eine kräftige Frau mit grauem Zopf einen Becher aus. Der Ausgang liegt im Süden.",
+        "en": "Smoke from a peat fire hangs beneath the low beams. A few farmers sit silently over their mugs and look you over. Behind the counter a sturdy woman with a grey braid is wiping out a cup. The way out lies to the south."
+      },
+      "exits": [
+        { "direction": "south", "to": "village_square", "keywords": { "de": ["Dorfplatz", "Ausgang"], "en": ["square", "exit"] } },
+        { "direction": "out", "to": "village_square", "keywords": { "de": ["Ausgang"], "en": ["exit"] } }
+      ],
+      "items": ["bread"],
+      "people": ["marta"]
+    },
+    {
+      "id": "forest_edge",
+      "name": { "de": "Waldrand", "en": "Edge of the Forest" },
+      "description": {
+        "de": "Die ersten Bäume sind alte Eichen, deren Äste sich über den Pfad neigen. Tiefer im Wald, weiter westlich, hörst du Wasser tropfen, als fiele es in einen tiefen Schacht. Im Osten liegt der Kreuzweg.",
+        "en": "The first trees are old oaks whose branches lean over the path. Deeper in the forest, further west, you hear water dripping, as if falling into a deep shaft. To the east lies the crossroads."
+      },
+      "exits": [
+        { "direction": "west", "to": "old_well", "keywords": { "de": ["Brunnen", "Wasser", "Lichtung"], "en": ["well", "water", "clearing"] } },
+        { "direction": "east", "to": "crossroads", "keywords": { "de": ["Kreuzweg"], "en": ["crossroads"] } }
+      ]
+    },
+    {
+      "id": "old_well",
+      "name": { "de": "Alter Brunnen", "en": "Old Well" },
+      "description": {
+        "de": "Auf einer kleinen Lichtung steht ein gemauerter Brunnen, halb von Efeu verschlungen. Sein Holzdach ist eingestürzt, und kalte Luft steigt aus der Tiefe auf. Der Pfad führt nach Osten zurück zum Waldrand.",
+        "en": "In a small clearing stands a stone well, half swallowed by ivy. Its wooden roof has collapsed, and cold air rises from the depths. The path leads east, back to the edge of the forest."
+      },
+      "exits": [
+        { "direction": "east", "to": "forest_edge", "keywords": { "de": ["Waldrand", "Pfad"], "en": ["edge", "path"] } }
+      ],
+      "items": ["well", "rusty_key"]
+    }
+  ],
+  "items": [
+    {
+      "id": "waystone",
+      "de": { "noun": "Wegstein", "gender": "m", "adjectives": ["verwittert"], "synonyms": ["Stein", "Inschrift", "Meilenstein"] },
+      "en": { "noun": "waystone", "adjectives": ["weathered"], "synonyms": ["stone", "inscription", "milestone"] },
+      "description": {
+        "de": "Die Inschrift ist fast verwittert. Du kannst gerade noch entziffern: „Ebersfurt – Osten. Bastion – Norden. Der Wald – …“ Der Rest wurde abgeschlagen, und zwar mit Absicht.",
+        "en": "The inscription is almost worn away. You can just make out: “Ebersfurt – east. Bastion – north. The forest – …” The rest has been chipped off, and deliberately so."
+      },
+      "portable": false,
+      "scenery": true
+    },
+    {
+      "id": "broken_arrow",
+      "de": { "noun": "Pfeil", "gender": "m", "adjectives": ["abgebrochen"], "synonyms": ["Pfeilschaft", "Schaft"] },
+      "en": { "noun": "arrow", "adjectives": ["broken"], "synonyms": ["shaft"] },
+      "description": {
+        "de": "Ein abgebrochener Pfeil mit schwarzer Befiederung. Die Spitze ist aus einem Metall, das du nicht kennst – sie bleibt kalt, obwohl du sie in der Hand hältst.",
+        "en": "A broken arrow fletched with black feathers. Its head is made of a metal you do not know – it stays cold even as you hold it."
+      }
+    },
+    {
+      "id": "crest",
+      "de": { "noun": "Wappen", "gender": "n", "synonyms": ["Relief", "Stein"] },
+      "en": { "noun": "crest", "synonyms": ["arms", "emblem", "carving"] },
+      "description": {
+        "de": "Ein Turm unter drei Sternen. Die Sterne sind tiefer eingeschlagen als der Turm, als hätte man sie später nachgemeißelt.",
+        "en": "A tower beneath three stars. The stars are cut deeper than the tower, as if someone had carved them in later."
+      },
+      "portable": false,
+      "scenery": true
+    },
+    {
+      "id": "statue",
+      "de": { "noun": "Statue", "gender": "f", "adjectives": ["steinern"], "synonyms": ["Ritter", "Standbild"] },
+      "en": { "noun": "statue", "adjectives": ["stone"], "synonyms": ["knight"] },
+      "description": {
+        "de": "Der Ritter stützt sich auf ein Schwert. Jemand hat ihm das Gesicht abgeschlagen – sorgfältig, ohne den Rest der Statue zu beschädigen.",
+        "en": "The knight leans on a sword. Someone has struck off his face – carefully, without damaging the rest of the statue."
+      },
+      "portable": false,
+      "scenery": true
+    },
+    {
+      "id": "notice_board",
+      "de": { "noun": "Anschlagtafel", "gender": "f", "synonyms": ["Tafel", "Zettel", "Aushang"] },
+      "en": { "noun": "board", "adjectives": ["notice"], "synonyms": ["notice", "note", "sign"] },
+      "description": {
+        "de": "Ein vergilbter Zettel: „Wer die Bastion betritt, kehrt nicht zurück. – Der Rat von Ebersfurt“. Darunter hat jemand mit Kohle gekritzelt: „Feiglinge.“",
+        "en": "A yellowed note: “Whoever enters the Bastion does not return. – The Council of Ebersfurt”. Beneath it someone has scrawled in charcoal: “Cowards.”"
+      },
+      "portable": false,
+      "scenery": true
+    },
+    {
+      "id": "bread",
+      "de": { "noun": "Brotlaib", "gender": "m", "synonyms": ["Brot", "Laib"] },
+      "en": { "noun": "bread", "synonyms": ["loaf"], "indefiniteArticle": "some" },
+      "description": {
+        "de": "Ein Laib dunkles Roggenbrot, noch warm vom Ofen.",
+        "en": "A loaf of dark rye bread, still warm from the oven."
+      }
+    },
+    {
+      "id": "well",
+      "de": { "noun": "Brunnen", "gender": "m", "adjectives": ["alt"], "synonyms": ["Schacht", "Brunnenrand", "Rand"] },
+      "en": { "noun": "well", "adjectives": ["old"], "synonyms": ["shaft", "rim"] },
+      "description": {
+        "de": "Du beugst dich über den Rand. Tief unten schimmert Wasser – und für einen Augenblick meinst du, ein Gesicht darin zu sehen, das nicht deines ist.",
+        "en": "You lean over the rim. Far below, water glimmers – and for a moment you think you see a face in it that is not your own."
+      },
+      "portable": false,
+      "scenery": true
+    },
+    {
+      "id": "rusty_key",
+      "de": { "noun": "Schlüssel", "gender": "m", "adjectives": ["rostig"] },
+      "en": { "noun": "key", "adjectives": ["rusty"] },
+      "description": {
+        "de": "Ein großer, eiserner Schlüssel, von Rost zerfressen. In den Griff ist ein Turm unter drei Sternen geprägt.",
+        "en": "A large iron key, eaten by rust. A tower beneath three stars is stamped into its bow."
+      }
+    }
+  ],
+  "people": [
+    {
+      "id": "marta",
+      "de": { "noun": "Wirtin", "gender": "f", "name": "Marta", "synonyms": ["Frau", "Wirt"] },
+      "en": { "noun": "innkeeper", "name": "Marta", "synonyms": ["woman", "landlady", "barkeep"] },
+      "description": {
+        "de": "Marta ist nicht mehr jung, aber ihre Unterarme verraten, dass sie ohne Mühe ein Fass stemmt. Sie beobachtet dich, ohne es sich anmerken zu lassen.",
+        "en": "Marta is no longer young, but her forearms say she could lift a barrel without effort. She watches you without letting it show."
+      },
+      "talk": [
+        {
+          "de": "„Fremde kommen selten nach Ebersfurt“, sagt Marta, ohne aufzusehen. „Und die, die kommen, wollen meistens zur Bastion. Lass es bleiben.“",
+          "en": "“Strangers rarely come to Ebersfurt,” Marta says without looking up. “And those who do usually want to go to the Bastion. Leave it be.”"
+        },
+        {
+          "de": "Sie stellt den Becher ab. „Das Tor ist verschlossen, seit mein Großvater ein Kind war. Den Schlüssel hat der alte Verwalter zum Brunnen im Wald gebracht – sagt man jedenfalls.“",
+          "en": "She sets the cup down. “That gate has been locked since my grandfather was a boy. The old steward took the key to the well in the forest – or so they say.”"
+        },
+        {
+          "de": "„Mehr weiß ich nicht. Und mehr will ich auch nicht wissen.“ Sie wendet sich ab und poliert einen Krug, der längst sauber ist.",
+          "en": "“That's all I know. And it's all I want to know.” She turns away and polishes a mug that has long been clean."
+        }
+      ]
+    }
+  ]
+}
