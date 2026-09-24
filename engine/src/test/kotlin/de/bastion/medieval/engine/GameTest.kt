@@ -1,19 +1,17 @@
 package de.bastion.medieval.engine
 
 import de.bastion.medieval.engine.Paragraph.Kind
+import de.bastion.medieval.engine.TestSupport.playing
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class GameTest {
-    private val world = World.loadDefault()
-
-    private fun Game.say(input: String, language: Language = Language.DE): String =
-        submit(input, language).joinToString("\n") { it.text }
+    private val world = TestSupport.world
 
     @Test
     fun `German walkthrough of the test area`() {
-        val game = Game(world)
+        val game = playing()
         val opening = game.opening(Language.DE)
         assertEquals(Kind.TITLE, opening[1].kind)
         assertEquals("Kreuzweg im Nebel", opening[1].text)
@@ -49,7 +47,7 @@ class GameTest {
 
     @Test
     fun `English play uses the same state`() {
-        val game = Game(world)
+        val game = playing()
         game.say("go east", Language.EN)
         assertEquals("village_square", game.state.location)
         val tavern = game.say("go in the tavern", Language.EN)
@@ -62,7 +60,7 @@ class GameTest {
 
     @Test
     fun `talking cycles through lines and repeats the last one`() {
-        val game = Game(world)
+        val game = playing()
         game.say("o")
         game.say("n")
         val first = game.say("sprich mit der Wirtin")
@@ -79,7 +77,7 @@ class GameTest {
 
     @Test
     fun `things and typos`() {
-        val game = Game(world)
+        val game = playing()
         assertTrue("Die Inschrift ist fast verwittert" in game.say("untersuche den wegstien"))
         assertTrue("Die Inschrift" in game.say("Wegstein"))
         assertEquals("Der verwitterte Wegstein lässt sich nicht mitnehmen.", game.say("nimm den Stein").lines().last())
@@ -89,7 +87,7 @@ class GameTest {
 
     @Test
     fun `dropping puts things into the current location`() {
-        val game = Game(world)
+        val game = playing()
         game.say("n")
         game.say("nimm den Pfeil")
         game.say("s")
@@ -100,12 +98,12 @@ class GameTest {
 
     @Test
     fun `locked paths can be opened without walking through`() {
-        val game = Game(world)
+        val game = playing()
         assertEquals("Der verwitterte Wegstein lässt sich nicht öffnen.", game.say("öffne den Wegstein").lines().last())
         game.say("n")
         game.say("n")
         assertTrue("ohne Schlüssel" in game.say("schließ das Tor auf"))
-        val withKey = Game(world, game.state.copy(itemPlaces = game.state.itemPlaces + ("rusty_key" to GameState.INVENTORY)))
+        val withKey = Game(world, TestSupport.rules, game.state.copy(itemPlaces = game.state.itemPlaces + ("rusty_key" to GameState.INVENTORY)))
         assertTrue("The rusty key fits" in withKey.say("unlock the gate", Language.EN))
         assertEquals("bastion_gate", withKey.state.location)
         assertEquals("Der Weg dorthin ist bereits offen.", withKey.say("öffne das Tor").lines().last())
@@ -116,7 +114,7 @@ class GameTest {
 
     @Test
     fun `back returns to the previous location`() {
-        val game = Game(world)
+        val game = playing()
         assertEquals("Du weißt nicht mehr genau, woher du gekommen bist.", game.say("zurück").lines().last())
         game.say("w")
         game.say("zurück")
@@ -125,7 +123,7 @@ class GameTest {
 
     @Test
     fun `suggestions offer exits, people and things`() {
-        val game = Game(world)
+        val game = playing()
         game.say("o")
         game.say("n")
         val labels = game.suggestions(Language.DE).map { it.label }
@@ -138,7 +136,7 @@ class GameTest {
         // Every suggestion must be understood by the game itself.
         for (language in Language.entries) {
             for (suggestion in game.suggestions(language)) {
-                val probe = Game(world, game.state)
+                val probe = Game(world, TestSupport.rules, game.state)
                 val answer = probe.submit(suggestion.command, language)
                 assertTrue(answer.none { it.text == Messages.notUnderstood[language] }, "${suggestion.command} -> $answer")
             }

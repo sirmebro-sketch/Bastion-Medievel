@@ -26,6 +26,9 @@ class MainActivity : ComponentActivity() {
                     onSubmit = game::submit,
                     onLanguage = game::setLanguage,
                     onNewGame = game::newGame,
+                    onShowSheet = game::showSheet,
+                    onShowCredits = game::showCredits,
+                    onShowRolls = game::setShowRolls,
                 )
             }
         }

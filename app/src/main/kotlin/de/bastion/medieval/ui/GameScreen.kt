@@ -94,6 +94,9 @@ fun GameScreen(
     onLanguage: (Language) -> Unit,
     onNewGame: () -> Unit,
     modifier: Modifier = Modifier,
+    onShowSheet: () -> Unit = {},
+    onShowCredits: () -> Unit = {},
+    onShowRolls: (Boolean) -> Unit = {},
 ) {
     val strings = UiStrings.of(state.language)
     var input by rememberSaveable { mutableStateOf("") }
@@ -114,12 +117,16 @@ fun GameScreen(
             .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)),
     ) {
         Header(
-            locationName = state.locationName,
-            language = state.language,
+            state = state,
             strings = strings,
-            onLanguage = onLanguage,
-            onHelp = { onSubmit(strings.helpCommand) },
-            onNewGame = { confirmNewGame = true },
+            actions = MenuActions(
+                onLanguage = onLanguage,
+                onHelp = { onSubmit(strings.helpCommand) },
+                onNewGame = { confirmNewGame = true },
+                onShowSheet = onShowSheet,
+                onShowCredits = onShowCredits,
+                onShowRolls = onShowRolls,
+            ),
         )
         StoryLog(state, Modifier.weight(1f))
         Controls(
@@ -151,15 +158,18 @@ fun GameScreen(
     }
 }
 
+private class MenuActions(
+    val onLanguage: (Language) -> Unit,
+    val onHelp: () -> Unit,
+    val onNewGame: () -> Unit,
+    val onShowSheet: () -> Unit,
+    val onShowCredits: () -> Unit,
+    val onShowRolls: (Boolean) -> Unit,
+)
+
 @Composable
-private fun Header(
-    locationName: String,
-    language: Language,
-    strings: UiStrings,
-    onLanguage: (Language) -> Unit,
-    onHelp: () -> Unit,
-    onNewGame: () -> Unit,
-) {
+private fun Header(state: GameUiState, strings: UiStrings, actions: MenuActions) {
+    val language = state.language
     var menuOpen by remember { mutableStateOf(false) }
     Box(
         Modifier
@@ -179,7 +189,7 @@ private fun Header(
                 style = TextStyle(fontFamily = Fonts.Cinzel, fontSize = 11.sp, letterSpacing = 3.sp, color = Palette.GoldDim),
             )
             Text(
-                locationName,
+                state.locationName,
                 style = TextStyle(fontFamily = Fonts.Cinzel, fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Palette.Gold),
                 textAlign = TextAlign.Center,
                 maxLines = 1,
@@ -194,22 +204,37 @@ private fun Header(
                 onDismissRequest = { menuOpen = false },
                 containerColor = Palette.ParchmentLight,
             ) {
-                LanguageItem(strings.languageGerman, selected = language == Language.DE) {
+                CheckedItem(strings.languageGerman, checked = language == Language.DE) {
                     menuOpen = false
-                    onLanguage(Language.DE)
+                    actions.onLanguage(Language.DE)
                 }
-                LanguageItem(strings.languageEnglish, selected = language == Language.EN) {
+                CheckedItem(strings.languageEnglish, checked = language == Language.EN) {
                     menuOpen = false
-                    onLanguage(Language.EN)
+                    actions.onLanguage(Language.EN)
                 }
                 HorizontalDivider(color = Palette.GoldDim.copy(alpha = 0.5f))
+                if (!state.inCreation) {
+                    DropdownMenuItem(text = { Text(strings.sheet) }, onClick = {
+                        menuOpen = false
+                        actions.onShowSheet()
+                    })
+                }
+                CheckedItem(strings.showRolls, checked = state.showRolls) {
+                    menuOpen = false
+                    actions.onShowRolls(!state.showRolls)
+                }
                 DropdownMenuItem(text = { Text(strings.help) }, onClick = {
                     menuOpen = false
-                    onHelp()
+                    actions.onHelp()
                 })
+                DropdownMenuItem(text = { Text(strings.credits) }, onClick = {
+                    menuOpen = false
+                    actions.onShowCredits()
+                })
+                HorizontalDivider(color = Palette.GoldDim.copy(alpha = 0.5f))
                 DropdownMenuItem(text = { Text(strings.newGame) }, onClick = {
                     menuOpen = false
-                    onNewGame()
+                    actions.onNewGame()
                 })
             }
         }
@@ -218,12 +243,12 @@ private fun Header(
 }
 
 @Composable
-private fun LanguageItem(label: String, selected: Boolean, onClick: () -> Unit) {
+private fun CheckedItem(label: String, checked: Boolean, onClick: () -> Unit) {
     DropdownMenuItem(
         text = {
             Text(
-                (if (selected) "✓  " else "     ") + label,
-                fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+                (if (checked) "✓  " else "     ") + label,
+                fontWeight = if (checked) FontWeight.SemiBold else FontWeight.Normal,
             )
         },
         onClick = onClick,
@@ -253,10 +278,11 @@ private fun MenuButton(description: String, onClick: () -> Unit) {
 @Composable
 private fun StoryLog(state: GameUiState, modifier: Modifier) {
     val listState = rememberLazyListState()
+    val entries = if (state.showRolls) state.log else state.log.filter { it.paragraph.kind != Paragraph.Kind.ROLL }
     LaunchedEffect(state.latestAnswerId) {
-        if (state.log.isEmpty()) return@LaunchedEffect
-        val target = state.log.indexOfFirst { it.id == state.latestAnswerId }
-        if (target >= 0) listState.animateScrollToItem(target) else listState.scrollToItem(state.log.lastIndex)
+        if (entries.isEmpty()) return@LaunchedEffect
+        val target = entries.indexOfFirst { it.id == state.latestAnswerId }
+        if (target >= 0) listState.animateScrollToItem(target) else listState.scrollToItem(entries.lastIndex)
     }
     val locale = LocaleList(state.language.code)
     Box(
@@ -271,7 +297,7 @@ private fun StoryLog(state: GameUiState, modifier: Modifier) {
                 .fillMaxSize()
                 .testTag("story"),
         ) {
-            items(state.log, key = { it.id }) { entry ->
+            items(entries, key = { it.id }) { entry ->
                 LogParagraph(
                     entry.paragraph,
                     locale,
@@ -351,6 +377,116 @@ private fun LogParagraph(paragraph: Paragraph, locale: LocaleList, modifier: Mod
             style = HintStyle.copy(localeList = locale),
             modifier = modifier.fillMaxWidth().padding(vertical = 4.dp),
         )
+        Paragraph.Kind.OPTION -> Text(
+            option(paragraph.text),
+            style = BodyStyle.copy(fontSize = 17.sp, lineHeight = 24.sp, textAlign = TextAlign.Start, localeList = locale),
+            modifier = modifier.fillMaxWidth().padding(vertical = 3.dp),
+        )
+        Paragraph.Kind.ROLL -> RollLine(paragraph.text, modifier)
+        Paragraph.Kind.TABLE -> Table(paragraph.text, modifier)
+    }
+}
+
+/** "Name — description": the name in semi-bold burgundy. */
+private fun option(text: String): AnnotatedString = buildAnnotatedString {
+    val split = text.indexOf(" — ")
+    if (split < 0) {
+        append(text)
+        return@buildAnnotatedString
+    }
+    withStyle(SpanStyle(fontWeight = FontWeight.SemiBold, color = Palette.BurgundyDark)) { append(text.substring(0, split)) }
+    append(text.substring(split))
+}
+
+/** A dice roll on a small tag with a d20 mark. */
+@Composable
+private fun RollLine(text: String, modifier: Modifier) {
+    val shape = RoundedCornerShape(6.dp)
+    Row(
+        modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+            .clip(shape)
+            .background(Palette.ParchmentEdge.copy(alpha = 0.35f))
+            .border(1.dp, Palette.GoldDim.copy(alpha = 0.7f), shape)
+            .padding(horizontal = 10.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        D20Mark(Modifier.size(16.dp))
+        Spacer(Modifier.width(8.dp))
+        Text(text, style = TextStyle(fontFamily = Fonts.Garamond, fontSize = 15.sp, lineHeight = 20.sp, color = Palette.BurgundyDark))
+    }
+}
+
+/** A small twenty-sided die: a hexagon with an inner triangle. */
+@Composable
+private fun D20Mark(modifier: Modifier) {
+    Canvas(modifier) {
+        val w = size.width
+        val h = size.height
+        val stroke = Stroke(width = 1.3.dp.toPx())
+        val hexagon = Path().apply {
+            moveTo(w * 0.5f, 0f)
+            lineTo(w, h * 0.25f)
+            lineTo(w, h * 0.75f)
+            lineTo(w * 0.5f, h)
+            lineTo(0f, h * 0.75f)
+            lineTo(0f, h * 0.25f)
+            close()
+        }
+        val triangle = Path().apply {
+            moveTo(w * 0.5f, h * 0.22f)
+            lineTo(w * 0.82f, h * 0.7f)
+            lineTo(w * 0.18f, h * 0.7f)
+            close()
+        }
+        drawPath(hexagon, Palette.Burgundy, style = stroke)
+        drawPath(triangle, Palette.Burgundy, style = stroke)
+    }
+}
+
+/**
+ * Rows separated by line breaks, columns by tabs. Tables with three or more columns
+ * treat the first row as a header; two-column tables are key/value lists.
+ */
+@Composable
+private fun Table(text: String, modifier: Modifier) {
+    val rows = text.split('\n').map { it.split('\t') }
+    val columns = rows.maxOfOrNull { it.size } ?: 0
+    val header = columns >= 3
+    Column(
+        modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp)
+            .border(1.dp, Palette.GoldDim.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
+            .padding(horizontal = 10.dp, vertical = 6.dp),
+    ) {
+        rows.forEachIndexed { index, cells ->
+            val isHeader = header && index == 0
+            Row(Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
+                cells.forEachIndexed { column, cell ->
+                    val first = column == 0
+                    Text(
+                        cell,
+                        style = TextStyle(
+                            fontFamily = if (isHeader) Fonts.Cinzel else Fonts.Garamond,
+                            fontSize = if (isHeader) 12.sp else 16.sp,
+                            fontWeight = if (!first && !isHeader && columns == 2) FontWeight.SemiBold else FontWeight.Normal,
+                            color = if (isHeader || (first && columns == 2)) Palette.InkMuted else Palette.Ink,
+                            textAlign = if (first) TextAlign.Start else TextAlign.End,
+                        ),
+                        modifier = Modifier.weight(
+                            when {
+                                columns == 2 -> if (first) 1f else 1.5f
+                                first -> 1.8f
+                                else -> 1f
+                            },
+                        ),
+                    )
+                }
+            }
+            if (isHeader) HorizontalDivider(color = Palette.GoldDim.copy(alpha = 0.5f))
+        }
     }
 }
 

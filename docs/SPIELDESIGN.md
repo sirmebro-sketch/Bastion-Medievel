@@ -30,7 +30,83 @@ Was er heute kann:
 - nur ein Gegenstand ohne Verb wird als Ansehen gedeutet: „Wegstein“
 
 Verben heute: umsehen, untersuchen, gehen, zurück, nehmen, ablegen, öffnen,
-Inventar, sprechen, Hilfe, warten.
+Schloss knacken, aufbrechen, Inventar, sprechen, Charakterbogen, Lizenzen, Hilfe,
+warten.
+
+## Die Spielfigur
+
+Entschieden am 24.09.2026 mit dem Projektinhaber.
+
+### Regelgrundlage
+Die Werte folgen dem etablierten System der fünften Edition, genauer dem
+**Systemreferenzdokument 5.2.1** (offizielle deutsche Fassung, CC-BY-4.0):
+sechs Attribute (Stärke, Geschicklichkeit, Konstitution, Intelligenz, Weisheit,
+Charisma), 18 Fertigkeiten, Proben mit W20 + Modifikator (+ Übungsbonus) gegen
+einen Schwierigkeitsgrad (SG), Vorteil/Nachteil, Stufen 1–20 nach
+Erfahrungspunkten. Die vorgeschriebene Namensnennung steht im Spiel unter
+„Lizenzen“. Der Name „Dungeons & Dragons“ wird nicht verwendet; erlaubt ist
+„kompatibel mit der fünften Edition“.
+
+### Die Figur
+- ist **jung, etwa 18–20** – das genaue Alter kennt sie selbst nicht. Alle
+  Hintergründe sind so geschrieben, dass das zusammenpasst.
+- **Geschlecht** ist wählbar (männlich/weiblich) und beeinflusst Anrede,
+  Reaktionen und später Entscheidungen und Ereignisse.
+- kann grundsätzlich **Magie** wirken, weiß es aber noch nicht. Magie wird später
+  relevant und bekommt einen eigenen Namen. Der Charaktereditor enthält deshalb
+  bewusst noch nichts dazu.
+
+### Charaktererschaffung (Ablauf im Spiel)
+1. Geschlecht → 2. Name → 3. Volk → 4. Werdegang → 5. Hintergrund →
+6. Attribute (Punktkauf: 27 Punkte, Werte 8–15, Vorschlag je Werdegang) →
+7. Merkmal (Menschen: zwei) → 8. Zusatzfertigkeit (nur Menschen) →
+9. Zusammenfassung als Charakterbogen, alles änderbar, dann „los“.
+
+### Völker
+Mensch, Zwerg, Elf, Halbling (Merkmale nach SRD, für ein Textspiel übersetzt) und
+der **Erdling** – ein eigenes Volk, das noch ausgearbeitet wird (derzeit
+Platzhalter ohne Sonderregeln).
+
+### Werdegänge statt Klassen
+Keine Klassen, sondern eine Vorerfahrung. Jeder Werdegang gibt zwei geübte
+Fertigkeiten, eine besondere Fähigkeit, Startausrüstung und – automatisch
+passend – eine **Schwäche** (Nachteil auf eine Fertigkeit):
+
+| Werdegang | Fähigkeit | Schwäche |
+|---|---|---|
+| Raufbold | Kampferprobt | Hitzkopf (Überzeugen) |
+| Langfinger | Schlösser knacken | Ungebildet (Nachforschungen) |
+| Fährtenleser | Spuren lesen | Menschenscheu (Auftreten) |
+| Kräuterkundige(r) | Wunden versorgen | Sanftmütig (Einschüchtern) |
+| Schreiber | Belesen | Stubenhocker (Athletik) |
+| Spielmann/Spielfrau | Silberzunge | Großmaul (Heimlichkeit) |
+| Handwerker | Kundiges Auge | Bodenständig (Arkane Kunde) |
+| Händler | Feilschen | Verwöhnt (Überlebenskunst) |
+| Künstler | Auge für Details | Träumer (Wahrnehmung) |
+| Knappe/Knappin | Ritterliche Schule | Grundehrlich (Täuschen) |
+| Chorknabe/Chormädchen | Kirchenkind | Weltfremd (Motiv erkennen) |
+
+### Hintergründe
+Geben wie im SRD +2/+1 auf Attribute und setzen **Story-Flags**, auf die die Welt
+reagiert: Verstoßenes Ziehkind, Deserteur, Gossenkind, Entlaufenes
+Klosterkind, Grenzlandflüchtling, Schuldner.
+
+### Wie die Welt reagiert (Werkzeuge für Inhalte)
+- Texte mit `variants` und Bedingungen (`gender`, `species`, `career`,
+  `background`, `trait`, `feature`, `flag`) – z. B. begrüßt Marta einen
+  Chorknaben anders als eine Elfe.
+- `[[männlich|weiblich]]` im Text wählt die Form nach Geschlecht, `{name}`
+  setzt den Namen ein.
+- Hindernisse mit Proben: verschlossene Wege lassen sich knacken (nur mit der
+  Fähigkeit „Schlösser knacken“) oder aufbrechen – je ein Versuch.
+- Geheimnisse an Gegenständen: der erste genaue Blick löst eine Probe aus.
+- Erfahrungspunkte für geöffnete Wege, Geheimnisse und erste Besuche.
+- Würfelproben sind sichtbar und im Menü abschaltbar.
+
+### Stufenaufstieg
+Erfahrungspunkte und Stufen nach SRD-Tabelle sind eingebaut (Trefferpunkte und
+Übungsbonus steigen). Wie sich die Figur beim Aufstieg sonst entwickelt
+(„Skalierung“), wird später festgelegt.
 
 ## Die Welt – „so groß wie lokal möglich“
 
@@ -50,12 +126,10 @@ Geplanter Weg zu einer sehr großen, tiefen Welt ohne Internet:
 
 - **Story**: Grundidee, Hauptkonflikt und Ton der Geschichte kommen vom Projekt
   selbst (in Arbeit). Das jetzige Testgebiet wird danach ersetzt.
-- **Charakterbogen** (Idee, noch nicht umgesetzt): eine eigene Figur wie bei
-  einem Pen-&-Paper-Bogen – Werte (z. B. Stärke, Geschick, Klugheit, Charisma),
-  Fertigkeiten, Lebenspunkte, Ausrüstung. Proben mit Würfeln entscheiden, ob
-  Handlungen gelingen („du versuchst, das Schloss zu knacken – Geschick-Probe“).
-  Dafür braucht die Engine Werte im Spielstand, eine Würfel-Mechanik mit festem
-  Zufallsstartwert und eine Charaktererschaffung am Spielbeginn.
+- **Erdling**: Beschreibung und Regeln des eigenen Volks
+- **Magie**: Name, Entdeckung und Regeln
+- **Skalierung beim Stufenaufstieg**
+- Ausrüstung als echte Gegenstände (derzeit nur auf dem Charakterbogen), Münzen ausgeben
 - Kürzere Ortsbeschreibung bei wiederholtem Besuch
 - Fürwörter im Parser („nimm ihn“, „sprich mit ihr“)
 - Gesprächsthemen („frag Marta nach dem Schlüssel“)

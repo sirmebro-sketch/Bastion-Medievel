@@ -22,6 +22,13 @@ data class GameState(
     val visited: Set<String> = emptySet(),
     val talkProgress: Map<String, Int> = emptyMap(),
     val turns: Int = 0,
+    /** The player character; null until character creation is finished. */
+    val character: Character? = null,
+    /** Character creation in progress; null once the character exists. */
+    val creation: CreationState? = null,
+    /** Seed and counter of the deterministic dice, see [Dice]. */
+    val seed: Long = 0,
+    val rolls: Int = 0,
 ) {
     val inventory: List<String> get() = itemPlaces.filterValues { it == INVENTORY }.keys.toList()
 
@@ -30,17 +37,24 @@ data class GameState(
     companion object {
         const val INVENTORY = "@inventory"
 
-        fun new(world: World): GameState = GameState(
+        /** A new game; it starts with character creation. */
+        fun new(world: World, seed: Long = 0): GameState = GameState(
             location = world.data.start,
             itemPlaces = world.initialItemPlaces(),
             visited = setOf(world.data.start),
+            creation = CreationState(),
+            seed = seed,
         )
     }
 }
 
-/** One entry of the story log shown to the player. */
+/**
+ * One entry of the story log shown to the player. A paragraph with a [slot] replaces
+ * earlier paragraphs of the same slot in the log (used for the point-buy table, which
+ * would otherwise repeat after every change).
+ */
 @Serializable
-data class Paragraph(val kind: Kind, val text: String) {
+data class Paragraph(val kind: Kind, val text: String, val slot: String? = null) {
     @Serializable
     enum class Kind {
         /** What the player typed. */
@@ -58,6 +72,15 @@ data class Paragraph(val kind: Kind, val text: String) {
 
         /** Exits, help and other guidance outside the story voice. */
         @SerialName("hint") HINT,
+
+        /** A choice or entry with a name: "Name — description". */
+        @SerialName("option") OPTION,
+
+        /** A dice roll; the player can hide these. */
+        @SerialName("roll") ROLL,
+
+        /** Rows separated by line breaks, columns by tabs. */
+        @SerialName("table") TABLE,
     }
 }
 
@@ -72,7 +95,7 @@ data class SaveGame(
     val log: List<Paragraph> = emptyList(),
 ) {
     companion object {
-        const val VERSION = 1
+        const val VERSION = 2
         const val MAX_LOG = 300
 
         private val json = Json {

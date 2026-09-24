@@ -19,6 +19,9 @@ data class UiStrings(
     val cancel: String,
     val languageGerman: String,
     val languageEnglish: String,
+    val sheet: String,
+    val showRolls: String,
+    val credits: String,
 ) {
     companion object {
         private val GERMAN = UiStrings(
@@ -34,6 +37,9 @@ data class UiStrings(
             cancel = "Abbrechen",
             languageGerman = "Deutsch",
             languageEnglish = "English",
+            sheet = "Charakterbogen",
+            showRolls = "Würfelproben anzeigen",
+            credits = "Lizenzen",
         )
 
         private val ENGLISH = UiStrings(
@@ -49,6 +55,9 @@ data class UiStrings(
             cancel = "Cancel",
             languageGerman = "Deutsch",
             languageEnglish = "English",
+            sheet = "Character sheet",
+            showRolls = "Show dice rolls",
+            credits = "Licences",
         )
 
         fun of(language: Language): UiStrings = when (language) {

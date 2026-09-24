@@ -9,6 +9,9 @@ weiß, tippt auf einen der Vorschläge unter dem Text.
 - Läuft komplett offline, die App hat keine Internet-Berechtigung (wird im Build geprüft)
 - Deutsch als Hauptsprache, Englisch als vollständige Übersetzung, im Spiel umschaltbar
 - Der Stand wird nach jedem Zug automatisch gespeichert
+- Zu Beginn erschafft man seine Figur im Dialog: Geschlecht, Name, Volk, Werdegang,
+  Hintergrund, Attribute (Punktkauf) und Merkmal. Die Werte folgen dem System der
+  fünften Edition (SRD 5.2.1); Würfelproben sind sichtbar und abschaltbar.
 
 Die eigentliche Geschichte ist noch nicht geschrieben. Im Spiel steckt derzeit
 ein kleines **Testgebiet**: Kreuzweg, Dorf mit Schänke, Wald mit Brunnen und das
@@ -55,6 +58,7 @@ installierten App nicht mehr einspielen.
 engine/   Spiellogik in reinem Kotlin, ohne Android – eigener Gradle-Build
   src/main/kotlin/…/engine/   Parser, Grammatik, Welt, Spielstand, Spiel
   src/main/resources/world/world.json   die Spielwelt (Orte, Dinge, Figuren)
+  src/main/resources/rules/character.json   Völker, Werdegänge, Hintergründe, Merkmale
   src/test/…                  Tests der Spiellogik
 app/      Android-App (Jetpack Compose): Oberfläche, Speichern, Sprache
   src/test/…                  Oberflächentests mit Robolectric, erzeugen Screenshots
@@ -87,7 +91,14 @@ Voraussetzungen: JDK 17 oder neuer, Android-SDK (für die App).
 ./gradlew :app:assembleDebug      # Debug-APK
 ```
 
-## Lizenzen der Schriften
+## Lizenzen
+
+Bastion Medieval ist kompatibel mit der fünften Edition (5E).
+
+Dieses Werk enthält Material aus dem Systemreferenzdokument 5.2.1 („SRD 5.2.1“)
+von Wizards of the Coast LLC, verfügbar unter https://www.dndbeyond.com/srd. Das
+SRD 5.2.1 ist lizenziert gemäß Creative Commons Namensnennung 4.0 International
+Public License (verfügbar unter https://creativecommons.org/licenses/by/4.0/legalcode.de).
 
 Cinzel, EB Garamond und UnifrakturMaguntia stehen unter der SIL Open Font
 License 1.1. Die Lizenztexte liegen in `app/src/main/assets/licenses/` und werden

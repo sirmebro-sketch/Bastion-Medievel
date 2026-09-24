@@ -6,26 +6,75 @@ import de.bastion.medieval.engine.Paragraph.Kind
  * Runs the game: reads what the player typed, changes the [GameState] and answers with
  * paragraphs. Every call takes the language to answer in, so the player can switch
  * languages at any time without losing progress.
+ *
+ * A new game starts with character creation ([CharacterCreator]); once the character
+ * exists, input goes to the world.
  */
-class Game(val world: World, state: GameState = GameState.new(world)) {
-    var state: GameState = state
+class Game(
+    val world: World,
+    val rules: CharacterRules = CharacterRules.loadDefault(),
+    state: GameState = GameState.new(world),
+) {
+    var state: GameState =
+        if (state.character == null && state.creation == null) state.copy(creation = CreationState()) else state
         private set
 
     private val parser = Parser()
+    private val creator = CharacterCreator(rules)
 
     private val here: Location get() = world.location(state.location)
 
+    val inCreation: Boolean get() = state.creation != null
+
+    private val sheet: Sheet? get() = state.character?.let { Sheet(it, rules) }
+
+    private fun context() = TextContext(state.character, sheet?.features ?: emptySet(), state.flags)
+
+    private fun LocalizedText.r(language: Language): String = render(language, context())
+
     fun title(language: Language): String = world.data.title[language]
 
-    fun locationName(language: Language): String = here.name[language]
+    fun locationName(language: Language): String =
+        if (inCreation) Messages.creationTitle[language] else here.name.r(language)
 
-    /** The story's opening, followed by the first location. */
-    fun opening(language: Language): List<Paragraph> =
-        listOf(Paragraph(Kind.TEXT, world.data.intro[language])) + describe(language)
+    /** The very first paragraphs of a new game. */
+    fun opening(language: Language): List<Paragraph> {
+        val creation = state.creation
+        return if (creation != null) creator.intro(creation, language) else storyStart(language)
+    }
+
+    /** The character sheet (menu), or nothing while the character is being created. */
+    fun sheetView(language: Language): List<Paragraph> = sheet?.let { SheetView.render(it, language) } ?: emptyList()
+
+    /** Licence and attribution notes (menu). */
+    fun credits(language: Language): List<Paragraph> = listOf(Paragraph(Kind.HINT, Messages.credits[language]))
+
+    /** What to show after loading a save that stopped in the middle of character creation. */
+    fun resume(language: Language): List<Paragraph> =
+        state.creation?.let { creator.prompt(it, language) } ?: emptyList()
 
     /** Handles one line of player input; the answer starts with the input itself. */
     fun submit(input: String, language: Language): List<Paragraph> {
         val text = input.trim()
+        if (text.isEmpty()) return emptyList()
+
+        val creation = state.creation
+        if (creation != null) {
+            val slot = if (creator.step(creation) == CreationStep.ABILITIES) CharacterCreator.POINT_BUY_SLOT_INPUT else null
+            val echo = Paragraph(Kind.INPUT, text, slot)
+            return when (val result = creator.handle(creation, text, language)) {
+                is CharacterCreator.Result.Continue -> {
+                    state = state.copy(creation = result.state)
+                    listOf(echo) + result.output
+                }
+                is CharacterCreator.Result.Finished -> {
+                    val background = rules.background(result.character.background)
+                    state = state.copy(character = result.character, creation = null, flags = state.flags + background.flags)
+                    listOf(echo) + result.output + storyStart(language)
+                }
+            }
+        }
+
         val answer = when (val parsed = parser.parse(text, language)) {
             Parsed.Empty -> return emptyList()
             Parsed.NotUnderstood -> notUnderstood(language)
@@ -36,35 +85,51 @@ class Game(val world: World, state: GameState = GameState.new(world)) {
     }
 
     /** Commands that make sense right now, for players who don't know what to type. */
-    fun suggestions(language: Language): List<Suggestion> = buildList {
-        for (exit in here.exits.sortedBy { it.direction.ordinal }) {
-            val toward = exit.direction.toward[language]
-            add(Suggestion(Messages.goLabel.format(language, toward).capitalizeFirst(), Messages.goCommand.format(language, toward)))
+    fun suggestions(language: Language): List<Suggestion> {
+        state.creation?.let { return creator.suggestions(it, language) }
+        return buildList {
+            for (exit in here.exits.sortedBy { it.direction.ordinal }) {
+                val toward = exit.direction.toward[language]
+                add(Suggestion(Messages.goLabel.format(language, toward).capitalizeFirst(), Messages.goCommand.format(language, toward)))
+            }
+            val features = sheet?.features ?: emptySet()
+            for (exit in lockedExits()) {
+                if (exit.pick != null && (exit.pick.feature == null || exit.pick.feature in features) && triedFlag("pick", exit) !in state.flags) {
+                    add(Suggestion(Messages.pickLabel[language], Messages.pickCommand[language]))
+                }
+                if (exit.force != null && triedFlag("force", exit) !in state.flags) {
+                    add(Suggestion(Messages.forceLabel[language], Messages.forceCommand[language]))
+                }
+            }
+            for (person in peopleHere()) {
+                val name = person.naming.definite(language, Case.DATIVE)
+                add(Suggestion(Messages.talkLabel.format(language, name), Messages.talkCommand.format(language, name)))
+            }
+            val items = itemsHere()
+            for (item in items.filter { it.portable }) {
+                add(
+                    Suggestion(
+                        Messages.takeLabel.format(language, item.naming.label(language)).capitalizeFirst(),
+                        Messages.takeCommand.format(language, item.naming.definite(language, Case.ACCUSATIVE)),
+                    ),
+                )
+            }
+            for (item in items.filter { examinedFlag(it) !in state.flags }) {
+                add(
+                    Suggestion(
+                        Messages.examineLabel.format(language, item.naming.label(language)).capitalizeFirst(),
+                        Messages.examineCommand.format(language, item.naming.definite(language, Case.ACCUSATIVE)),
+                    ),
+                )
+            }
+            add(Suggestion(Messages.lookLabel[language], Messages.lookCommand[language]))
+            if (state.inventory.isNotEmpty()) add(Suggestion(Messages.inventoryLabel[language], Messages.inventoryCommand[language]))
+            add(Suggestion(Messages.sheetLabel[language], Messages.sheetCommand[language]))
         }
-        for (person in peopleHere()) {
-            val name = person.naming.definite(language, Case.DATIVE)
-            add(Suggestion(Messages.talkLabel.format(language, name), Messages.talkCommand.format(language, name)))
-        }
-        val items = itemsHere()
-        for (item in items.filter { it.portable }) {
-            add(
-                Suggestion(
-                    Messages.takeLabel.format(language, item.naming.label(language)).capitalizeFirst(),
-                    Messages.takeCommand.format(language, item.naming.definite(language, Case.ACCUSATIVE)),
-                ),
-            )
-        }
-        for (item in items.filter { examinedFlag(it) !in state.flags }) {
-            add(
-                Suggestion(
-                    Messages.examineLabel.format(language, item.naming.label(language)).capitalizeFirst(),
-                    Messages.examineCommand.format(language, item.naming.definite(language, Case.ACCUSATIVE)),
-                ),
-            )
-        }
-        add(Suggestion(Messages.lookLabel[language], Messages.lookCommand[language]))
-        if (state.inventory.isNotEmpty()) add(Suggestion(Messages.inventoryLabel[language], Messages.inventoryCommand[language]))
     }
+
+    private fun storyStart(language: Language): List<Paragraph> =
+        listOf(Paragraph(Kind.TEXT, world.data.intro.r(language))) + describe(language)
 
     private fun execute(command: Parsed.Command, language: Language): List<Paragraph> = when (command.verb) {
         Verb.LOOK -> describe(language)
@@ -74,8 +139,12 @@ class Game(val world: World, state: GameState = GameState.new(world)) {
         Verb.TAKE -> take(command.words, language)
         Verb.DROP -> drop(command.words, language)
         Verb.OPEN -> open(command.words, language)
+        Verb.PICK -> overcome(command.words, ApproachKind.PICK, language)
+        Verb.FORCE -> overcome(command.words, ApproachKind.FORCE, language)
         Verb.INVENTORY -> inventory(language)
         Verb.TALK -> talk(command.words, language)
+        Verb.SHEET -> sheetView(language)
+        Verb.CREDITS -> credits(language)
         Verb.HELP -> listOf(Paragraph(Kind.HINT, Messages.help[language]))
         Verb.WAIT -> text(Messages.wait[language])
     }
@@ -84,8 +153,8 @@ class Game(val world: World, state: GameState = GameState.new(world)) {
 
     private fun describe(language: Language): List<Paragraph> = buildList {
         val location = here
-        add(Paragraph(Kind.TITLE, location.name[language]))
-        add(Paragraph(Kind.SCENE, location.description[language]))
+        add(Paragraph(Kind.TITLE, location.name.r(language)))
+        add(Paragraph(Kind.SCENE, location.description.r(language)))
 
         val visible = itemsHere().filterNot { it.scenery }
         if (visible.isNotEmpty()) {
@@ -121,11 +190,23 @@ class Game(val world: World, state: GameState = GameState.new(world)) {
             is Resolution.One -> when (val target = found.target) {
                 is Target.Thing -> {
                     state = state.copy(flags = state.flags + examinedFlag(target.item))
-                    text(target.item.description[language])
+                    text(target.item.description.r(language)) + revealSecret(target.item, language)
                 }
-                is Target.Someone -> text(target.person.description[language])
+                is Target.Someone -> text(target.person.description.r(language))
             }
         }
+    }
+
+    /** The first close look at a thing with a secret triggers one check. */
+    private fun revealSecret(item: Item, language: Language): List<Paragraph> {
+        val secret = item.secret ?: return emptyList()
+        val flag = "secret:${item.id}"
+        if (flag in state.flags || state.character == null) return emptyList()
+        state = state.copy(flags = state.flags + flag)
+        val check = check(secret.skill, secret.dc, language)
+        if (!check.success) return check.paragraphs
+        secret.flag?.let { state = state.copy(flags = state.flags + it) }
+        return check.paragraphs + Paragraph(Kind.TEXT, secret.text.r(language)) + gainXp(secret.xp, language)
     }
 
     // --- Things ---------------------------------------------------------------------------
@@ -209,16 +290,15 @@ class Game(val world: World, state: GameState = GameState.new(world)) {
         val index = state.talkProgress[person.id] ?: 0
         val line = person.talk[minOf(index, person.talk.lastIndex)]
         state = state.copy(talkProgress = state.talkProgress + (person.id to minOf(index + 1, person.talk.lastIndex)))
-        return listOf(Paragraph(Kind.DIALOGUE, line[language]))
+        return listOf(Paragraph(Kind.DIALOGUE, line.r(language)))
     }
 
-    // --- Moving ---------------------------------------------------------------------------
+    // --- Moving and obstacles -------------------------------------------------------------
 
     private fun go(command: Parsed.Command, language: Language): List<Paragraph> {
         val exits = here.exits
         if (command.words.isNotEmpty()) {
-            val matches = best(command.words, exits) { exitVocabulary(it, language) }
-                .ifEmpty { best(command.words, exits) { exitVocabulary(it, language.other) } }
+            val matches = matchingExits(command.words, language)
             when {
                 matches.map { it.to }.distinct().size == 1 -> return travel(matches.first(), language)
                 matches.size > 1 -> {
@@ -239,21 +319,46 @@ class Game(val world: World, state: GameState = GameState.new(world)) {
     /** Unlocks a path without walking through it ("öffne das Tor"). */
     private fun open(words: List<String>, language: Language): List<Paragraph> {
         if (words.isEmpty()) return text(Messages.whatOpen[language])
-        val exits = best(words, here.exits) { exitVocabulary(it, language) }
-            .ifEmpty { best(words, here.exits) { exitVocabulary(it, language.other) } }
+        val exits = matchingExits(words, language)
         val exit = exits.firstOrNull { it.requires != null } ?: exits.firstOrNull()
         if (exit != null) {
             val requirement = exit.requires ?: return text(Messages.notLocked[language])
-            if (openFlag(here, exit) in state.flags) return text(Messages.alreadyOpen[language])
-            if (state.itemPlaces[requirement] != GameState.INVENTORY) return text((exit.locked ?: Messages.lockedDefault)[language])
-            state = state.copy(flags = state.flags + openFlag(here, exit))
-            return text((exit.unlock ?: Messages.unlockDefault)[language])
+            if (isOpen(exit)) return text(Messages.alreadyOpen[language])
+            if (state.itemPlaces[requirement] != GameState.INVENTORY) return text((exit.locked ?: Messages.lockedDefault).r(language))
+            return listOf(Paragraph(Kind.TEXT, (exit.unlock ?: Messages.unlockDefault).r(language))) + markOpen(exit, language)
         }
         val candidates = itemsHere().map(Target::Thing) + inventoryItems().map(Target::Thing) + peopleHere().map(Target::Someone)
         return when (val found = resolve(words, candidates, language)) {
             Resolution.None -> text(Messages.noSuchThing[language])
             is Resolution.Many -> ambiguous(found.targets, language)
             is Resolution.One -> text(Messages.cannotOpen.format(language, found.target.naming.definite(language)).capitalizeFirst())
+        }
+    }
+
+    private enum class ApproachKind(val id: String) { PICK("pick"), FORCE("force") }
+
+    /** Picking a lock or forcing a locked path open: one check, one attempt per path. */
+    private fun overcome(words: List<String>, kind: ApproachKind, language: Language): List<Paragraph> {
+        val nothing = if (kind == ApproachKind.PICK) Messages.nothingToPick else Messages.nothingToForce
+        val locked = lockedExits()
+        val named = if (words.isEmpty()) emptyList() else matchingExits(words, language)
+        val exit = named.singleOrNull()?.takeIf { it.requires != null } ?: locked.singleOrNull()
+            ?: return text(nothing[language])
+        if (isOpen(exit)) return text(Messages.alreadyOpen[language])
+        val approach = (if (kind == ApproachKind.PICK) exit.pick else exit.force) ?: return text(nothing[language])
+        val features = sheet?.features ?: emptySet()
+        if (approach.feature != null && approach.feature !in features) {
+            return text((approach.denied ?: Messages.pickDenied).r(language))
+        }
+        val tried = triedFlag(kind.id, exit)
+        if (tried in state.flags) return text(Messages.alreadyTried[language])
+        state = state.copy(flags = state.flags + tried)
+
+        val check = check(approach.skill, approach.dc, language)
+        return if (check.success) {
+            check.paragraphs + Paragraph(Kind.TEXT, approach.success.r(language)) + markOpen(exit, language)
+        } else {
+            check.paragraphs + Paragraph(Kind.TEXT, approach.failure.r(language))
         }
     }
 
@@ -267,24 +372,109 @@ class Game(val world: World, state: GameState = GameState.new(world)) {
         val out = mutableListOf<Paragraph>()
         val from = here
         val requirement = exit.requires
-        if (requirement != null) {
-            val flag = openFlag(from, exit)
-            if (flag !in state.flags) {
-                if (state.itemPlaces[requirement] != GameState.INVENTORY) {
-                    return text((exit.locked ?: Messages.lockedDefault)[language])
-                }
-                state = state.copy(flags = state.flags + flag)
-                out += Paragraph(Kind.TEXT, (exit.unlock ?: Messages.unlockDefault)[language])
+        if (requirement != null && !isOpen(exit)) {
+            if (state.itemPlaces[requirement] != GameState.INVENTORY) {
+                return text((exit.locked ?: Messages.lockedDefault).r(language))
             }
+            out += Paragraph(Kind.TEXT, (exit.unlock ?: Messages.unlockDefault).r(language))
+            out += markOpen(exit, language)
         }
+        val firstVisit = exit.to !in state.visited
         state = state.copy(previous = from.id, location = exit.to, visited = state.visited + exit.to)
         out += describe(language)
+        if (firstVisit) out += gainXp(here.xp, language)
         return out
     }
+
+    private fun matchingExits(words: List<String>, language: Language): List<Exit> =
+        best(words, here.exits) { exitVocabulary(it, language) }
+            .ifEmpty { best(words, here.exits) { exitVocabulary(it, language.other) } }
 
     private fun exitVocabulary(exit: Exit, language: Language): Vocabulary {
         val destination = world.location(exit.to).name[language]
         return Vocabulary(Words.foldAll(exit.keywords[language] + destination), emptySet())
+    }
+
+    private fun lockedExits(): List<Exit> = here.exits.filter { it.requires != null && !isOpen(it) }
+
+    private fun isOpen(exit: Exit): Boolean = openFlag(here, exit) in state.flags
+
+    private fun markOpen(exit: Exit, language: Language): List<Paragraph> {
+        state = state.copy(flags = state.flags + openFlag(here, exit))
+        return gainXp(exit.xp, language)
+    }
+
+    // --- Checks and experience ------------------------------------------------------------
+
+    private class CheckResult(val success: Boolean, val paragraphs: List<Paragraph>)
+
+    /**
+     * An ability check as in the SRD: d20 + ability modifier (+ proficiency bonus if
+     * trained) against the DC, with advantage/disadvantage, halfling luck and luck points.
+     */
+    private fun check(skill: Skill, dc: Int, language: Language): CheckResult {
+        val sheet = sheet ?: return CheckResult(false, emptyList())
+        val bonus = sheet.skillBonus(skill)
+        val halfling = "halfling_luck" in sheet.features
+        val lines = mutableListOf<String>()
+
+        fun d20(): Int {
+            val value = Dice.roll(state.seed, state.rolls, 20)
+            state = state.copy(rolls = state.rolls + 1)
+            return value
+        }
+        fun die(): Int {
+            val value = d20()
+            if (halfling && value == 1) {
+                lines += Messages.halflingLuck[language]
+                return d20()
+            }
+            return value
+        }
+        fun attempt(): Boolean {
+            val first = die()
+            val (kept, note) = when (sheet.edge(skill)) {
+                Edge.NONE -> first to ""
+                Edge.ADVANTAGE -> die().let { second ->
+                    maxOf(first, second) to Messages.advantageNote.format(language, "${minOf(first, second)}")
+                }
+                Edge.DISADVANTAGE -> die().let { second ->
+                    minOf(first, second) to Messages.disadvantageNote.format(language, "${maxOf(first, second)}")
+                }
+            }
+            val total = kept + bonus
+            val success = total >= dc
+            val modifier = if (bonus >= 0) "+ $bonus" else "− ${-bonus}"
+            val result = if (success) Messages.checkSuccess[language] else Messages.checkFailure[language]
+            lines += Messages.check.format(language, skill.displayName[language], "$dc", "$kept", note, modifier, "$total", result)
+            return success
+        }
+
+        var success = attempt()
+        if (!success && sheet.luckLeft > 0) {
+            val character = sheet.character.copy(luckUsed = sheet.character.luckUsed + 1)
+            state = state.copy(character = character)
+            lines += Messages.luckUsed.format(language, "${Sheet(character, rules).luckLeft}")
+            success = attempt()
+        }
+        return CheckResult(success, lines.map { Paragraph(Kind.ROLL, it) })
+    }
+
+    private fun gainXp(amount: Int, language: Language): List<Paragraph> {
+        val character = state.character ?: return emptyList()
+        if (amount <= 0) return emptyList()
+        val before = Rules.level(character.xp)
+        val gained = character.copy(xp = character.xp + amount)
+        val after = Rules.level(gained.xp)
+        // A new level refills luck points.
+        val updated = if (after > before) gained.copy(luckUsed = 0) else gained
+        state = state.copy(character = updated)
+        return buildList {
+            add(Paragraph(Kind.HINT, Messages.xpGained.format(language, "$amount")))
+            if (after > before) {
+                add(Paragraph(Kind.TEXT, Messages.levelUp.format(language, "$after", "${Sheet(updated, rules).maxHp}")))
+            }
+        }
     }
 
     // --- Helpers --------------------------------------------------------------------------
@@ -298,6 +488,8 @@ class Game(val world: World, state: GameState = GameState.new(world)) {
     private fun examinedFlag(item: Item) = "examined:${item.id}"
 
     private fun openFlag(location: Location, exit: Exit) = "open:${location.id}:${exit.direction.name.lowercase()}"
+
+    private fun triedFlag(kind: String, exit: Exit) = "tried:$kind:${here.id}:${exit.direction.name.lowercase()}"
 
     private fun text(text: String) = listOf(Paragraph(Kind.TEXT, text))
 

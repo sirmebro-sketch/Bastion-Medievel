@@ -9,7 +9,7 @@ class SaveGameTest {
 
     @Test
     fun `a save restores state and log`() {
-        val game = Game(world)
+        val game = TestSupport.playing()
         val log = game.opening(Language.DE) + game.submit("n", Language.DE) + game.submit("nimm den Pfeil", Language.DE)
         val text = SaveGame.encode(SaveGame(state = game.state, log = log))
         val restored = SaveGame.decode(text, world)!!

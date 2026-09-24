@@ -22,6 +22,12 @@ Bastion Medieval ist ein Text-RPG für Android (Kotlin, Jetpack Compose). Lies z
 - Nach Änderungen an `world.json` müssen `WorldTest` (Konsistenz) und die übrigen
   Engine-Tests grün sein.
 - Die App darf keine Internet-Berechtigung bekommen; CI prüft das.
+- Figur-Inhalte stehen in `engine/src/main/resources/rules/character.json`
+  (`CharacterRulesTest` prüft sie). Texte können mit `variants`/`when`,
+  `[[männlich|weiblich]]` und `{name}` auf die Figur reagieren (siehe
+  `docs/SPIELDESIGN.md`, Abschnitt „Die Spielfigur“).
+- Regeln folgen dem SRD 5.2.1 (CC-BY-4.0); die Namensnennung in README und im Spiel
+  („lizenzen“) muss erhalten bleiben. Kein „Dungeons & Dragons“ im Spiel.
 
 ## Bauen und Prüfen
 

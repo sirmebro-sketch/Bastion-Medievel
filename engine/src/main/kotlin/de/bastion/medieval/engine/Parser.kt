@@ -1,6 +1,6 @@
 package de.bastion.medieval.engine
 
-enum class Verb { LOOK, EXAMINE, GO, BACK, TAKE, DROP, OPEN, INVENTORY, TALK, HELP, WAIT }
+enum class Verb { LOOK, EXAMINE, GO, BACK, TAKE, DROP, OPEN, PICK, FORCE, INVENTORY, TALK, SHEET, CREDITS, HELP, WAIT }
 
 sealed interface Parsed {
     /**
@@ -85,7 +85,7 @@ class Parser {
                 }
             }
             Verb.LOOK -> if (words.isEmpty()) Parsed.Command(Verb.LOOK) else Parsed.Command(Verb.EXAMINE, words)
-            Verb.INVENTORY, Verb.HELP, Verb.WAIT, Verb.BACK -> Parsed.Command(verb)
+            Verb.INVENTORY, Verb.HELP, Verb.WAIT, Verb.BACK, Verb.SHEET, Verb.CREDITS -> Parsed.Command(verb)
             else -> Parsed.Command(verb, words)
         }
     }
@@ -183,6 +183,10 @@ class Parser {
             verb(Verb.HELP, "hilfe", "help", "befehle", "anleitung")
             verb(Verb.WAIT, "warte", "wart", "warten", "z", "ruhe", "raste", "rasten")
             verb(Verb.BACK, "umkehren")
+            verb(Verb.PICK, "knack", "knacke", "knacken", "aufknacken", "dietrich")
+            verb(Verb.FORCE, "aufbrechen", "ramme", "rammen", "ramm", "aufstemmen")
+            verb(Verb.SHEET, "charakter", "charakterbogen", "bogen", "werte", "status", "attribute", "fertigkeiten")
+            verb(Verb.CREDITS, "lizenzen", "lizenz", "impressum", "credits", "quellen")
 
             val look = listOf("sieh", "siehe", "seh", "sehe", "schau", "schaue", "guck", "gucke", "blick", "blicke")
             separable(Verb.EXAMINE, look, listOf("an"))
@@ -195,6 +199,7 @@ class Parser {
             separable(Verb.TALK, listOf("sprich", "spreche", "rede"), listOf("an"))
             separable(Verb.WAIT, listOf("ruh", "ruhe"), listOf("aus"))
             separable(Verb.BACK, listOf("kehr", "kehre"), listOf("um"))
+            separable(Verb.FORCE, listOf("brich", "breche", "stemm", "stemme", "tritt", "trete"), listOf("auf"))
 
             stop(
                 "der", "die", "das", "den", "dem", "des", "ein", "eine", "einen", "einem", "einer", "eines", "mit", "zu",
@@ -234,10 +239,15 @@ class Parser {
             verb(Verb.HELP, "help", "commands", "hilfe")
             verb(Verb.WAIT, "wait", "z", "rest")
             verb(Verb.BACK, "return", "retreat")
+            verb(Verb.PICK, "pick", "lockpick")
+            verb(Verb.FORCE, "force", "break", "smash", "bash", "ram")
+            verb(Verb.SHEET, "character", "sheet", "stats", "status", "abilities", "skills")
+            verb(Verb.CREDITS, "credits", "licenses", "licence", "license", "about")
 
             separable(Verb.TAKE, listOf("pick"), listOf("up"))
             separable(Verb.DROP, listOf("put", "set"), listOf("down"))
             separable(Verb.BACK, listOf("turn", "go", "head"), listOf("back"))
+            separable(Verb.FORCE, listOf("break", "kick", "bash"), listOf("open", "down", "in"))
             phrase(Verb.TAKE, "pick up")
             phrase(Verb.DROP, "put down")
             phrase(Verb.DROP, "set down")

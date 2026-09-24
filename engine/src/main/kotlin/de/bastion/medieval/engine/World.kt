@@ -13,8 +13,24 @@ data class LocalizedWords(val de: List<String> = emptyList(), val en: List<Strin
 }
 
 /**
+ * Another way past a locked exit: picking the lock or forcing it. It needs a check on
+ * [skill] against [dc]; a special ability ([feature], e.g. "lockpicking") may be required
+ * to try at all. Each approach can be tried once per exit.
+ */
+@Serializable
+data class Approach(
+    val skill: Skill,
+    val dc: Int,
+    val success: LocalizedText,
+    val failure: LocalizedText,
+    val feature: String? = null,
+    val denied: LocalizedText? = null,
+)
+
+/**
  * A path out of a location. If [requires] names an item, the player needs it to pass:
- * without it they read [locked], the first time with it they read [unlock].
+ * without it they read [locked], the first time with it they read [unlock]. [pick] and
+ * [force] are alternatives to the key. Opening it the first time is worth [xp].
  */
 @Serializable
 data class Exit(
@@ -24,6 +40,19 @@ data class Exit(
     val requires: String? = null,
     val locked: LocalizedText? = null,
     val unlock: LocalizedText? = null,
+    val pick: Approach? = null,
+    val force: Approach? = null,
+    val xp: Int = 0,
+)
+
+/** A hidden detail: examining the thing triggers one check; success reveals [text]. */
+@Serializable
+data class Secret(
+    val skill: Skill,
+    val dc: Int,
+    val text: LocalizedText,
+    val xp: Int = 0,
+    val flag: String? = null,
 )
 
 @Serializable
@@ -34,6 +63,8 @@ data class Location(
     val exits: List<Exit> = emptyList(),
     val items: List<String> = emptyList(),
     val people: List<String> = emptyList(),
+    /** Experience for the first visit. */
+    val xp: Int = 0,
 )
 
 /** A thing in the world. Scenery is part of the description and never listed separately. */
@@ -45,6 +76,7 @@ data class Item(
     val description: LocalizedText,
     val portable: Boolean = true,
     val scenery: Boolean = false,
+    val secret: Secret? = null,
 ) {
     val naming: Naming get() = Naming(de, en)
 }
@@ -83,8 +115,11 @@ class World(val data: WorldData) {
     fun initialItemPlaces(): Map<String, String> =
         data.locations.flatMap { location -> location.items.map { it to location.id } }.toMap()
 
-    /** All content errors; an empty list means the world is consistent. */
-    fun validate(): List<String> = buildList {
+    /**
+     * All content errors; an empty list means the world is consistent. With [rules], the
+     * special abilities that obstacles ask for are checked as well.
+     */
+    fun validate(rules: CharacterRules? = null): List<String> = buildList {
         fun duplicates(ids: List<String>, kind: String) =
             ids.groupingBy { it }.eachCount().filterValues { it > 1 }.keys.forEach { add("$kind '$it' is defined more than once") }
         duplicates(data.locations.map { it.id }, "Location")
@@ -110,6 +145,18 @@ class World(val data: WorldData) {
                     if (exit.requires !in items) add("$where: exit ${exit.direction} requires unknown item '${exit.requires}'")
                     if (exit.locked == null) add("$where: exit ${exit.direction} is locked but has no 'locked' text")
                 }
+                for ((kind, approach) in listOf("pick" to exit.pick, "force" to exit.force)) {
+                    if (approach == null) continue
+                    val at = "$where exit ${exit.direction} $kind"
+                    if (exit.requires == null) add("$at: only locked exits can have a $kind approach")
+                    text("$at success", approach.success)
+                    text("$at failure", approach.failure)
+                    approach.denied?.let { text("$at denied", it) }
+                    if (approach.dc !in 5..30) add("$at: DC must be between 5 and 30")
+                    if (rules != null && approach.feature != null && approach.feature !in rules.featureIds) {
+                        add("$at: unknown feature '${approach.feature}'")
+                    }
+                }
             }
             for (itemId in location.items) {
                 if (itemId !in items) add("$where contains unknown item '$itemId'")
@@ -122,6 +169,10 @@ class World(val data: WorldData) {
             naming("Item '${item.id}'", item.naming)
             text("Item '${item.id}' description", item.description)
             if (item.scenery && item.portable) add("Item '${item.id}' is scenery and must not be portable")
+            item.secret?.let {
+                text("Item '${item.id}' secret", it.text)
+                if (it.dc !in 5..30) add("Item '${item.id}' secret: DC must be between 5 and 30")
+            }
         }
         for (person in data.people) {
             naming("Person '${person.id}'", person.naming)

@@ -53,7 +53,37 @@
           "unlock": {
             "de": "Der rostige Schlüssel passt. Mit einem Knirschen, das dir durch Mark und Bein geht, dreht er sich im Schloss. Langsam schwingt das Tor auf.",
             "en": "The rusty key fits. With a grinding that goes right through you, it turns in the lock. Slowly the gate swings open."
-          }
+          },
+          "pick": {
+            "skill": "sleight_of_hand",
+            "dc": 13,
+            "feature": "lockpicking",
+            "success": {
+              "de": "Du schiebst deinen Draht ins Schloss, tastest, drehst – ein leises Klicken, dann ein zweites. Das alte Schloss gibt nach, und das Tor schwingt knarrend auf.",
+              "en": "You slide your wire into the lock, feel, turn – a soft click, then another. The old lock yields, and the gate creaks open."
+            },
+            "failure": {
+              "de": "Der Draht verbiegt sich im verrosteten Schloss und bricht ab. Mit diesem Schloss wirst du so nicht fertig.",
+              "en": "The wire bends in the rusted lock and snaps. You won't get past this lock that way."
+            },
+            "denied": {
+              "de": "Du rüttelst am Schloss, aber ohne Werkzeug und Übung bekommst du es nicht auf.",
+              "en": "You rattle the lock, but without tools and practice you can't open it."
+            }
+          },
+          "force": {
+            "skill": "athletics",
+            "dc": 18,
+            "success": {
+              "de": "Du wirfst dich mit aller Kraft gegen das Tor. Beim dritten Anlauf splittert das morsche Holz um das Schloss, und das Tor gibt nach.",
+              "en": "You throw yourself against the gate with all your strength. On the third try the rotten wood around the lock splinters, and the gate gives way."
+            },
+            "failure": {
+              "de": "Du wirfst dich gegen das Tor, bis dir die Schulter brennt. Das Eichenholz ist härter als du.",
+              "en": "You throw yourself against the gate until your shoulder burns. The oak is harder than you are."
+            }
+          },
+          "xp": 50
         },
         { "direction": "south", "to": "sunken_lane", "keywords": { "de": ["Hohlweg"], "en": ["lane"] } }
       ],
@@ -69,7 +99,8 @@
       "exits": [
         { "direction": "south", "to": "bastion_gate", "keywords": { "de": ["Tor"], "en": ["gate"] } }
       ],
-      "items": ["statue"]
+      "items": ["statue"],
+      "xp": 25
     },
     {
       "id": "village_square",
@@ -90,7 +121,16 @@
       "name": { "de": "Schänke „Zum Krummen Horn“", "en": "The Crooked Horn Tavern" },
       "description": {
         "de": "Rauch von Torffeuer hängt unter den niedrigen Balken. Ein paar Bauern sitzen schweigend über ihren Krügen und mustern dich. Hinter dem Schanktisch wischt eine kräftige Frau mit grauem Zopf einen Becher aus. Der Ausgang liegt im Süden.",
-        "en": "Smoke from a peat fire hangs beneath the low beams. A few farmers sit silently over their mugs and look you over. Behind the counter a sturdy woman with a grey braid is wiping out a cup. The way out lies to the south."
+        "en": "Smoke from a peat fire hangs beneath the low beams. A few farmers sit silently over their mugs and look you over. Behind the counter a sturdy woman with a grey braid is wiping out a cup. The way out lies to the south.",
+        "variants": [
+          {
+            "when": { "background": "noble_ward" },
+            "text": {
+              "de": "Rauch von Torffeuer hängt unter den niedrigen Balken. Ein paar Bauern sitzen über ihren Krügen und mustern deine feinen, wenn auch abgetragenen Kleider mit unverhohlenem Misstrauen. Hinter dem Schanktisch wischt eine kräftige Frau mit grauem Zopf einen Becher aus. Der Ausgang liegt im Süden.",
+              "en": "Smoke from a peat fire hangs beneath the low beams. A few farmers sit over their mugs, eyeing your fine if worn clothes with open distrust. Behind the counter a sturdy woman with a grey braid is wiping out a cup. The way out lies to the south."
+            }
+          }
+        ]
       },
       "exits": [
         { "direction": "south", "to": "village_square", "keywords": { "de": ["Dorfplatz", "Ausgang"], "en": ["square", "exit"] } },
@@ -142,7 +182,16 @@
       "en": { "noun": "arrow", "adjectives": ["broken"], "synonyms": ["shaft"] },
       "description": {
         "de": "Ein abgebrochener Pfeil mit schwarzer Befiederung. Die Spitze ist aus einem Metall, das du nicht kennst – sie bleibt kalt, obwohl du sie in der Hand hältst.",
-        "en": "A broken arrow fletched with black feathers. Its head is made of a metal you do not know – it stays cold even as you hold it."
+        "en": "A broken arrow fletched with black feathers. Its head is made of a metal you do not know – it stays cold even as you hold it.",
+        "variants": [
+          {
+            "when": { "background": "deserter" },
+            "text": {
+              "de": "Ein abgebrochener Pfeil mit schwarzer Befiederung. Im Tross hast du Soldaten über solche Pfeile flüstern hören – niemand wusste, wer sie schießt. Die Spitze bleibt kalt, obwohl du sie in der Hand hältst.",
+              "en": "A broken arrow fletched with black feathers. In the baggage train you heard soldiers whisper about arrows like this – no one knew who shot them. Its head stays cold even as you hold it."
+            }
+          }
+        ]
       }
     },
     {
@@ -196,7 +245,17 @@
         "en": "You lean over the rim. Far below, water glimmers – and for a moment you think you see a face in it that is not your own."
       },
       "portable": false,
-      "scenery": true
+      "scenery": true,
+      "secret": {
+        "skill": "perception",
+        "dc": 12,
+        "text": {
+          "de": "Zwischen Moos und Efeu ist etwas in den Brunnenrand geritzt: ein Turm unter drei Sternen. Darunter stand einmal ein Name – jemand hat ihn sorgfältig wieder ausgekratzt.",
+          "en": "Among the moss and ivy something is carved into the rim: a tower beneath three stars. Beneath it there was once a name – someone has carefully scratched it out."
+        },
+        "xp": 10,
+        "flag": "well_mark_seen"
+      }
     },
     {
       "id": "rusty_key",
@@ -219,8 +278,24 @@
       },
       "talk": [
         {
-          "de": "„Fremde kommen selten nach Ebersfurt“, sagt Marta, ohne aufzusehen. „Und die, die kommen, wollen meistens zur Bastion. Lass es bleiben.“",
-          "en": "“Strangers rarely come to Ebersfurt,” Marta says without looking up. “And those who do usually want to go to the Bastion. Leave it be.”"
+          "de": "„Fremde kommen selten nach Ebersfurt“, sagt Marta, ohne aufzusehen. „Und schon gar nicht so [[ein Grünschnabel wie du|ein junges Ding wie du]]. Die meisten wollen zur Bastion. Lass es bleiben, [[Junge|Mädchen]].“",
+          "en": "“Strangers rarely come to Ebersfurt,” Marta says without looking up. “Least of all [[a greenhorn like you|a girl as young as you]]. Most of them want to go to the Bastion. Leave it be, [[boy|girl]].”",
+          "variants": [
+            {
+              "when": { "species": "elf" },
+              "text": {
+                "de": "Marta mustert deine spitzen Ohren. „[[Ein Elf|Eine Elfe]] in Ebersfurt. Das hat es seit meiner Großmutter nicht mehr gegeben“, sagt sie. „Wenn du zur Bastion willst – lass es bleiben.“",
+                "en": "Marta eyes your pointed ears. “An elf in Ebersfurt. Not since my grandmother's day,” she says. “If you're after the Bastion – leave it be.”"
+              }
+            },
+            {
+              "when": { "career": "choir_child" },
+              "text": {
+                "de": "„Du riechst nach Weihrauch, [[Junge|Mädchen]]“, sagt Marta und schiebt dir einen Becher Milch hin. „Hat dich die Kirche geschickt? Gleichgültig. Wer zur Bastion geht, kommt nicht wieder.“",
+                "en": "“You smell of incense, [[boy|girl]],” Marta says, pushing a cup of milk towards you. “Did the church send you? No matter. Whoever goes to the Bastion doesn't come back.”"
+              }
+            }
+          ]
         },
         {
           "de": "Sie stellt den Becher ab. „Das Tor ist verschlossen, seit mein Großvater ein Kind war. Den Schlüssel hat der alte Verwalter zum Brunnen im Wald gebracht – sagt man jedenfalls.“",
@@ -228,7 +303,16 @@
         },
         {
           "de": "„Mehr weiß ich nicht. Und mehr will ich auch nicht wissen.“ Sie wendet sich ab und poliert einen Krug, der längst sauber ist.",
-          "en": "“That's all I know. And it's all I want to know.” She turns away and polishes a mug that has long been clean."
+          "en": "“That's all I know. And it's all I want to know.” She turns away and polishes a mug that has long been clean.",
+          "variants": [
+            {
+              "when": { "feature": "silver_tongue" },
+              "text": {
+                "de": "Du erzählst ihr eine Geschichte aus dem Süden, und zum ersten Mal lächelt sie. „Weil du mir gefällst, {name}: Der Schlüssel liegt nicht im Brunnen. Der Verwalter war zu feige, ihn hineinzuwerfen – er hat ihn auf den Rand gelegt.“",
+                "en": "You tell her a story from the south, and for the first time she smiles. “Because I like you, {name}: the key isn't in the well. The steward was too cowardly to throw it in – he left it on the rim.”"
+              }
+            }
+          ]
         }
       ]
     }

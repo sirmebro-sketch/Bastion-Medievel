@@ -1,0 +1,406 @@
+{
+  "species": [
+    {
+      "id": "human",
+      "name": { "de": "Mensch", "en": "Human" },
+      "summary": { "de": "vielseitig – eine zusätzliche Fertigkeit und ein zweites Merkmal", "en": "versatile – one extra skill and a second trait" },
+      "description": {
+        "de": "Menschen findet man überall, vom Fischerdorf bis zur Königsstadt. Was ihnen an Gaben fehlt, machen sie durch Anpassungsfähigkeit wett.",
+        "en": "Humans are found everywhere, from fishing villages to royal cities. What they lack in gifts they make up for in adaptability."
+      },
+      "extraSkill": true,
+      "extraTrait": true
+    },
+    {
+      "id": "dwarf",
+      "name": { "de": "[[Zwerg|Zwergin]]", "en": "Dwarf" },
+      "summary": { "de": "sieht im Dunkeln, spürt Hohlräume im Stein, trotzt Gift", "en": "sees in the dark, senses hollows in stone, shrugs off poison" },
+      "description": {
+        "de": "Zwerge sind klein, breit und zäh wie altes Wurzelholz. Sie vertrauen dem Stein mehr als dem Himmel.",
+        "en": "Dwarves are short, broad and as tough as old root wood. They trust stone more than the sky."
+      },
+      "features": [
+        { "id": "darkvision", "name": { "de": "Dunkelsicht", "en": "Darkvision" }, "description": { "de": "Du siehst im Dunkeln, wenn auch nur in Grautönen.", "en": "You can see in the dark, if only in shades of grey." } },
+        { "id": "stonecunning", "name": { "de": "Steingespür", "en": "Stonecunning" }, "description": { "de": "Berührst du Stein, spürst du Hohlräume, verborgene Gänge und Erschütterungen dahinter.", "en": "When you touch stone, you sense hollows, hidden passages and tremors behind it." } },
+        { "id": "dwarven_resilience", "name": { "de": "Zwergische Unverwüstlichkeit", "en": "Dwarven Resilience" }, "description": { "de": "Gift kann dir wenig anhaben: Du bist im Vorteil, wenn du ihm widerstehen musst.", "en": "Poison does you little harm: you have advantage when you must resist it." } }
+      ],
+      "hpPerLevel": 1
+    },
+    {
+      "id": "elf",
+      "name": { "de": "[[Elf|Elfe]]", "en": "Elf" },
+      "summary": { "de": "sieht im Dunkeln, scharfe Sinne, braucht keinen Schlaf", "en": "sees in the dark, keen senses, needs no sleep" },
+      "description": {
+        "de": "Elfen sind schlank, langlebig und still. Viele Menschen halten sie für hochmütig, manche für unheimlich.",
+        "en": "Elves are slender, long-lived and quiet. Many humans think them haughty, some think them uncanny."
+      },
+      "features": [
+        { "id": "darkvision", "name": { "de": "Dunkelsicht", "en": "Darkvision" }, "description": { "de": "Du siehst im Dunkeln, wenn auch nur in Grautönen.", "en": "You can see in the dark, if only in shades of grey." } },
+        { "id": "fey_ancestry", "name": { "de": "Feenblut", "en": "Fey Ancestry" }, "description": { "de": "Bezauberung gleitet leichter an dir ab: Du bist im Vorteil, wenn du ihr widerstehst.", "en": "Charms slide off you more easily: you have advantage when you resist them." } },
+        { "id": "trance", "name": { "de": "Trance", "en": "Trance" }, "description": { "de": "Du musst nicht schlafen. Vier Stunden stiller Versenkung genügen dir.", "en": "You don't need to sleep. Four hours of quiet meditation are enough." } }
+      ],
+      "skills": ["perception"]
+    },
+    {
+      "id": "halfling",
+      "name": { "de": "Halbling", "en": "Halfling" },
+      "summary": { "de": "klein, flink, furchtlos – und mit Glück gesegnet", "en": "small, quick, fearless – and blessed with luck" },
+      "description": {
+        "de": "Halblinge reichen den meisten Menschen kaum bis zur Brust. Sie lieben gutes Essen, warme Stuben und sind erstaunlich schwer zu erschrecken.",
+        "en": "Halflings barely reach most humans' chests. They love good food and warm parlours and are surprisingly hard to frighten."
+      },
+      "features": [
+        { "id": "halfling_luck", "name": { "de": "Halblingsglück", "en": "Halfling Luck" }, "description": { "de": "Würfelst du bei einer Probe eine 1, darfst du noch einmal würfeln.", "en": "When you roll a 1 on a check, you may roll again." } },
+        { "id": "brave", "name": { "de": "Tapferkeit", "en": "Brave" }, "description": { "de": "Du bist im Vorteil, wenn du dich gegen Furcht behaupten musst.", "en": "You have advantage when you must stand against fear." } },
+        { "id": "naturally_stealthy", "name": { "de": "Angeborene Verstohlenheit", "en": "Naturally Stealthy" }, "description": { "de": "Du verschwindest mühelos hinter Größeren und im Gedränge: Vorteil bei Heimlichkeit.", "en": "You vanish easily behind bigger folk and in crowds: advantage on Stealth." } }
+      ],
+      "advantages": ["stealth"]
+    },
+    {
+      "id": "earthling",
+      "name": { "de": "Erdling", "en": "Earthling" },
+      "summary": { "de": "ein Volk voller Rätsel – mehr wird sich zeigen", "en": "a people full of riddles – more will be revealed" },
+      "description": {
+        "de": "Über die Erdlinge spricht man nur hinter vorgehaltener Hand. Was sie ausmacht, wirst du erst noch herausfinden. (Die Regeln für Erdlinge werden noch geschrieben.)",
+        "en": "People speak of the Earthlings only in whispers. What sets them apart you have yet to discover. (The rules for Earthlings are still being written.)"
+      },
+      "placeholder": true
+    }
+  ],
+  "careers": [
+    {
+      "id": "brawler",
+      "name": { "de": "[[Raufbold|Raufboldin]]", "en": "Brawler" },
+      "summary": { "de": "kräftig und schon in manche Prügelei verwickelt", "en": "strong and no stranger to a brawl" },
+      "description": {
+        "de": "Wo es Streit gab, warst du nicht weit. Du hast gelernt einzustecken – und auszuteilen.",
+        "en": "Wherever there was a fight, you were never far. You learned to take a punch – and to throw one."
+      },
+      "skills": ["athletics", "intimidation"],
+      "feature": { "id": "seasoned_fighter", "name": { "de": "Kampferprobt", "en": "Seasoned Fighter" }, "description": { "de": "Im Handgemenge und beim Kräftemessen bist du im Vorteil (Athletik).", "en": "In scuffles and trials of strength you have advantage (Athletics)." } },
+      "advantages": ["athletics"],
+      "weakness": { "id": "hothead", "name": { "de": "Hitzkopf", "en": "Hothead" }, "description": { "de": "Dir platzt schnell der Kragen. Beim Überzeugen bist du im Nachteil.", "en": "You lose your temper quickly. You have disadvantage on Persuasion." }, "disadvantage": ["persuasion"] },
+      "hitDie": 10,
+      "focus": ["str", "con", "dex", "wis", "cha", "int"],
+      "equipment": [ { "de": "Knüppel", "en": "cudgel" }, { "de": "abgewetzte Lederweste", "en": "worn leather vest" } ],
+      "coins": 3
+    },
+    {
+      "id": "pickpocket",
+      "name": { "de": "Langfinger", "en": "Pickpocket" },
+      "summary": { "de": "hat sich mit Stehlen und Schleichen durchgeschlagen", "en": "got by through stealing and sneaking" },
+      "description": {
+        "de": "Ein voller Beutel am Gürtel eines Fremden war für dich schon immer eine Einladung. Du weißt, wie man ungesehen kommt und geht.",
+        "en": "A full purse on a stranger's belt was always an invitation to you. You know how to come and go unseen."
+      },
+      "skills": ["sleight_of_hand", "stealth"],
+      "feature": { "id": "lockpicking", "name": { "de": "Schlösser knacken", "en": "Lockpicking" }, "description": { "de": "Mit Draht und Geduld öffnest du einfache Schlösser. Du kannst versuchen, verschlossene Türen und Truhen zu knacken.", "en": "With wire and patience you open simple locks. You can try to pick locked doors and chests." } },
+      "weakness": { "id": "unlettered", "name": { "de": "Ungebildet", "en": "Unlettered" }, "description": { "de": "Du kannst kaum lesen, und Bücher sind dir fremd. Bei Nachforschungen bist du im Nachteil.", "en": "You can barely read, and books are foreign to you. You have disadvantage on Investigation." }, "disadvantage": ["investigation"] },
+      "hitDie": 8,
+      "focus": ["dex", "con", "wis", "cha", "int", "str"],
+      "equipment": [ { "de": "Dietrich aus Draht", "en": "wire lockpick" }, { "de": "Dolch", "en": "dagger" }, { "de": "dunkler Umhang", "en": "dark cloak" } ],
+      "coins": 5
+    },
+    {
+      "id": "tracker",
+      "name": { "de": "[[Fährtenleser|Fährtenleserin]]", "en": "Tracker" },
+      "summary": { "de": "kennt Wald und Wildnis, liest jede Spur", "en": "knows forest and wilds, reads every trail" },
+      "description": {
+        "de": "Du hast mehr Nächte unter Bäumen verbracht als unter Dächern. Ein geknickter Halm erzählt dir mehr als mancher Mensch.",
+        "en": "You have spent more nights under trees than under roofs. A bent blade of grass tells you more than many people do."
+      },
+      "skills": ["survival", "perception"],
+      "feature": { "id": "tracking", "name": { "de": "Spuren lesen", "en": "Tracking" }, "description": { "de": "Du erkennst Spuren von Menschen und Tieren, folgst ihnen und merkst, wenn dir jemand folgt.", "en": "You recognise the tracks of people and beasts, follow them and notice when someone follows you." } },
+      "weakness": { "id": "shy", "name": { "de": "Menschenscheu", "en": "Shy of People" }, "description": { "de": "Unter vielen Menschen fühlst du dich unwohl. Beim Auftreten bist du im Nachteil.", "en": "You feel uneasy among crowds. You have disadvantage on Performance." }, "disadvantage": ["performance"] },
+      "hitDie": 10,
+      "focus": ["dex", "wis", "con", "str", "int", "cha"],
+      "equipment": [ { "de": "Jagdbogen mit zwölf Pfeilen", "en": "hunting bow with twelve arrows" }, { "de": "Jagdmesser", "en": "hunting knife" }, { "de": "Feuerstein und Zunder", "en": "flint and tinder" } ],
+      "coins": 2
+    },
+    {
+      "id": "herbalist",
+      "name": { "de": "[[Kräuterkundiger|Kräuterkundige]]", "en": "Herbalist" },
+      "summary": { "de": "kennt Heilkräuter, Gifte und Verbände", "en": "knows healing herbs, poisons and bandages" },
+      "description": {
+        "de": "Eine alte Kräuterfrau hat dich mitgenommen, als niemand sonst es tat. Von ihr weißt du, welche Wurzel heilt und welche tötet.",
+        "en": "An old herb woman took you in when no one else would. From her you know which root heals and which one kills."
+      },
+      "skills": ["medicine", "nature"],
+      "feature": { "id": "wound_care", "name": { "de": "Wunden versorgen", "en": "Wound Care" }, "description": { "de": "Du kannst Verletzungen versorgen, Kräuter bestimmen und Gifte erkennen.", "en": "You can tend wounds, identify herbs and recognise poisons." } },
+      "weakness": { "id": "gentle", "name": { "de": "Sanftmütig", "en": "Gentle" }, "description": { "de": "Du bringst es kaum übers Herz, anderen Angst zu machen. Beim Einschüchtern bist du im Nachteil.", "en": "You can hardly bring yourself to frighten anyone. You have disadvantage on Intimidation." }, "disadvantage": ["intimidation"] },
+      "hitDie": 8,
+      "focus": ["wis", "int", "con", "dex", "cha", "str"],
+      "equipment": [ { "de": "Kräuterbeutel", "en": "herb pouch" }, { "de": "Sichel", "en": "sickle" }, { "de": "Verbandszeug", "en": "bandages" } ],
+      "coins": 4
+    },
+    {
+      "id": "scribe",
+      "name": { "de": "[[Schreiber|Schreiberin]]", "en": "Scribe" },
+      "summary": { "de": "belesen, schreibt und entziffert alte Schriften", "en": "well read, writes and deciphers old scripts" },
+      "description": {
+        "de": "Du hast Briefe für Leute geschrieben, die selbst nicht schreiben konnten, und dabei mehr gelesen, als dir gut tat.",
+        "en": "You wrote letters for people who could not write themselves, and read more along the way than was good for you."
+      },
+      "skills": ["history", "investigation"],
+      "feature": { "id": "well_read", "name": { "de": "Belesen", "en": "Well Read" }, "description": { "de": "Du entzifferst alte Schriften, Inschriften und Urkunden, an denen andere scheitern.", "en": "You decipher old scripts, inscriptions and charters that others cannot." } },
+      "weakness": { "id": "bookworm", "name": { "de": "Stubenhocker", "en": "Bookworm" }, "description": { "de": "Körperliche Anstrengung ist nicht deine Stärke. Bei Athletik bist du im Nachteil.", "en": "Physical effort is not your strength. You have disadvantage on Athletics." }, "disadvantage": ["athletics"] },
+      "hitDie": 6,
+      "focus": ["int", "wis", "con", "dex", "cha", "str"],
+      "equipment": [ { "de": "Schreibzeug", "en": "writing kit" }, { "de": "Wachstafel", "en": "wax tablet" }, { "de": "abgegriffenes Buch", "en": "well-thumbed book" } ],
+      "coins": 6
+    },
+    {
+      "id": "minstrel",
+      "name": { "de": "[[Spielmann|Spielfrau]]", "en": "Minstrel" },
+      "summary": { "de": "zieht mit Liedern und Geschichten durchs Land", "en": "wanders the land with songs and stories" },
+      "description": {
+        "de": "Auf Märkten und in Schänken hast du gesungen, erzählt und dich um Kopf und Kragen geredet.",
+        "en": "At markets and in taverns you have sung, told tales and talked your way into and out of trouble."
+      },
+      "skills": ["performance", "persuasion"],
+      "feature": { "id": "silver_tongue", "name": { "de": "Silberzunge", "en": "Silver Tongue" }, "description": { "de": "Du findest die richtigen Worte. Manche Gespräche bieten dir Möglichkeiten, die anderen verschlossen bleiben.", "en": "You find the right words. Some conversations offer you options that stay closed to others." } },
+      "weakness": { "id": "loudmouth", "name": { "de": "Großmaul", "en": "Loudmouth" }, "description": { "de": "Still sein fällt dir schwer. Bei Heimlichkeit bist du im Nachteil.", "en": "Keeping quiet is hard for you. You have disadvantage on Stealth." }, "disadvantage": ["stealth"] },
+      "hitDie": 8,
+      "focus": ["cha", "dex", "con", "wis", "int", "str"],
+      "equipment": [ { "de": "Laute", "en": "lute" }, { "de": "bunter Mantel", "en": "colourful coat" } ],
+      "coins": 6
+    },
+    {
+      "id": "artisan",
+      "name": { "de": "[[Handwerker|Handwerkerin]]", "en": "Artisan" },
+      "summary": { "de": "packt an, versteht Mechanik und repariert, was bricht", "en": "hard-working, understands mechanisms, mends what breaks" },
+      "description": {
+        "de": "In einer Werkstatt hast du geschuftet, bis dir die Hände brannten. Du weißt, wie Dinge gebaut sind – und wo sie nachgeben.",
+        "en": "You toiled in a workshop until your hands burned. You know how things are built – and where they give way."
+      },
+      "skills": ["athletics", "investigation"],
+      "feature": { "id": "keen_eye", "name": { "de": "Kundiges Auge", "en": "Keen Eye" }, "description": { "de": "Du erkennst Mechanismen, Fallen und Schwachstellen und kannst Dinge reparieren.", "en": "You spot mechanisms, traps and weak points and can mend things." } },
+      "weakness": { "id": "down_to_earth", "name": { "de": "Bodenständig", "en": "Down-to-Earth" }, "description": { "de": "Mit Übernatürlichem willst du nichts zu tun haben. Bei Arkaner Kunde bist du im Nachteil.", "en": "You want nothing to do with the uncanny. You have disadvantage on Arcana." }, "disadvantage": ["arcana"] },
+      "hitDie": 10,
+      "focus": ["str", "con", "int", "dex", "wis", "cha"],
+      "equipment": [ { "de": "Hammer", "en": "hammer" }, { "de": "Werkzeugrolle", "en": "tool roll" }, { "de": "Lederschürze", "en": "leather apron" } ],
+      "coins": 6
+    },
+    {
+      "id": "merchant",
+      "name": { "de": "[[Händler|Händlerin]]", "en": "Merchant" },
+      "summary": { "de": "handelt geschickt und durchschaut Absichten", "en": "trades shrewdly and sees through intentions" },
+      "description": {
+        "de": "Du bist mit einem Händlerkarren von Markt zu Markt gezogen und hast gelernt, dass jeder seinen Preis hat.",
+        "en": "You travelled from market to market with a merchant's cart and learned that everyone has a price."
+      },
+      "skills": ["persuasion", "insight"],
+      "feature": { "id": "haggling", "name": { "de": "Feilschen", "en": "Haggling" }, "description": { "de": "Du erzielst bessere Preise und merkst, wenn man dich beim Handel übers Ohr hauen will.", "en": "You get better prices and notice when someone tries to cheat you in a deal." } },
+      "weakness": { "id": "pampered", "name": { "de": "Verwöhnt", "en": "Pampered" }, "description": { "de": "Ein Leben ohne Dach und Tisch kennst du nicht. Bei Überlebenskunst bist du im Nachteil.", "en": "You don't know life without a roof and a table. You have disadvantage on Survival." }, "disadvantage": ["survival"] },
+      "hitDie": 6,
+      "focus": ["cha", "int", "wis", "con", "dex", "str"],
+      "equipment": [ { "de": "Handwaage", "en": "hand scales" }, { "de": "Rechenbrett", "en": "counting board" }, { "de": "gute Reisekleidung", "en": "good travelling clothes" } ],
+      "coins": 15
+    },
+    {
+      "id": "artist",
+      "name": { "de": "[[Künstler|Künstlerin]]", "en": "Artist" },
+      "summary": { "de": "zeichnet, malt und hat ein Auge für Details", "en": "draws, paints and has an eye for detail" },
+      "description": {
+        "de": "Mit Kohle und Farbe hältst du fest, was andere übersehen. Ein Maler hat dich angelernt – und dir mehr beigebracht als nur Pinselstriche.",
+        "en": "With charcoal and paint you capture what others overlook. A painter took you on – and taught you more than brushstrokes."
+      },
+      "skills": ["sleight_of_hand", "insight"],
+      "feature": { "id": "artists_eye", "name": { "de": "Auge für Details", "en": "Artist's Eye" }, "description": { "de": "Du erkennst Fälschungen und den Wert schöner Dinge und kannst Siegel, Karten und Gesichter getreu abzeichnen.", "en": "You spot forgeries and the value of fine things, and you can copy seals, maps and faces faithfully." } },
+      "weakness": { "id": "dreamer", "name": { "de": "[[Träumer|Träumerin]]", "en": "Dreamer" }, "description": { "de": "Oft bist du mit den Gedanken woanders. Bei Wahrnehmung bist du im Nachteil.", "en": "Your mind is often elsewhere. You have disadvantage on Perception." }, "disadvantage": ["perception"] },
+      "hitDie": 6,
+      "focus": ["dex", "wis", "cha", "int", "con", "str"],
+      "equipment": [ { "de": "Kohlestifte", "en": "charcoal sticks" }, { "de": "Skizzenbuch", "en": "sketchbook" }, { "de": "Farbpigmente", "en": "pigments" } ],
+      "coins": 4
+    },
+    {
+      "id": "squire",
+      "name": { "de": "[[Knappe|Knappin]]", "en": "Squire" },
+      "summary": { "de": "bei einem Ritter in die Lehre gegangen", "en": "trained in the service of a knight" },
+      "description": {
+        "de": "Du hast einem Ritter Rüstung und Pferd versorgt, bis es ihn nicht mehr gab. Sein Wappen hast du aus deinem Rock getrennt.",
+        "en": "You tended a knight's armour and horse until he was no more. You cut his crest from your tunic."
+      },
+      "skills": ["athletics", "animal_handling"],
+      "feature": { "id": "knightly_training", "name": { "de": "Ritterliche Schule", "en": "Knightly Training" }, "description": { "de": "Du führst Schwert und Schild, reitest sicher und weißt dich bei Hofe zu benehmen. Adlige nehmen dich eher ernst.", "en": "You wield sword and shield, ride well and know how to behave at court. Nobles take you more seriously." } },
+      "weakness": { "id": "honest", "name": { "de": "Grundehrlich", "en": "Honest to a Fault" }, "description": { "de": "Lügen kommen dir schwer über die Lippen. Beim Täuschen bist du im Nachteil.", "en": "Lies don't come easily to you. You have disadvantage on Deception." }, "disadvantage": ["deception"] },
+      "hitDie": 10,
+      "focus": ["str", "con", "cha", "wis", "dex", "int"],
+      "equipment": [ { "de": "Kurzschwert", "en": "shortsword" }, { "de": "verbeulter Schild", "en": "dented shield" }, { "de": "Knappenrock ohne Wappen", "en": "squire's tunic without a crest" } ],
+      "coins": 5
+    },
+    {
+      "id": "choir_child",
+      "name": { "de": "[[Chorknabe|Chormädchen]]", "en": "[[Choirboy|Choirgirl]]" },
+      "summary": { "de": "im Dienst der Kirche aufgewachsen, mit Gebet und Gesang", "en": "raised in the church's service, with prayer and song" },
+      "description": {
+        "de": "Du hast in einer Kirche gesungen, Kerzen gezogen und die Gebete der Alten gelernt. Die Welt draußen kennst du nur aus Predigten.",
+        "en": "You sang in a church, made candles and learned the old prayers. You know the world outside only from sermons."
+      },
+      "skills": ["religion", "performance"],
+      "feature": { "id": "church_child", "name": { "de": "Kirchenkind", "en": "Child of the Church" }, "description": { "de": "Du kennst Gebete, Riten und die Wege in Kirchen und Klöstern. Geistliche begegnen dir mit Wohlwollen, und dein Gesang kann aufgewühlte Gemüter beruhigen.", "en": "You know prayers, rites and the ways of churches and monasteries. Clergy treat you kindly, and your singing can calm troubled minds." } },
+      "weakness": { "id": "sheltered", "name": { "de": "Weltfremd", "en": "Sheltered" }, "description": { "de": "Du glaubst an das Gute im Menschen – zu sehr. Bei Motiv erkennen bist du im Nachteil.", "en": "You believe in the good in people – too much. You have disadvantage on Insight." }, "disadvantage": ["insight"] },
+      "hitDie": 6,
+      "focus": ["cha", "wis", "int", "con", "dex", "str"],
+      "equipment": [ { "de": "Gebetsbuch", "en": "prayer book" }, { "de": "Gebetskette", "en": "prayer beads" }, { "de": "Chorhemd", "en": "choir robe" } ],
+      "coins": 2
+    }
+  ],
+  "backgrounds": [
+    {
+      "id": "noble_ward",
+      "name": { "de": "Verstoßenes Ziehkind", "en": "Cast-out Ward" },
+      "summary": { "de": "in einem Adelshaus aufgezogen – und vor die Tür gesetzt", "en": "raised in a noble house – and turned out" },
+      "description": {
+        "de": "Ein Adelshaus nahm dich als Findelkind auf. Du wuchst zwischen Seidenvorhängen auf, aber nie als eines der ihren. Eines Morgens hieß es, du hättest zu gehen. Warum, hat man dir nie gesagt.",
+        "en": "A noble house took you in as a foundling. You grew up among silk curtains, but never as one of them. One morning you were told to leave. No one ever told you why."
+      },
+      "consequences": {
+        "de": "Adlige behandeln dich beinahe wie ihresgleichen, einfache Leute misstrauen dir. Ein Siegelring erinnert an das Haus – und dort hat man dich nicht vergessen.",
+        "en": "Nobles treat you almost as one of their own, common folk distrust you. A signet ring recalls the house – and there, you have not been forgotten."
+      },
+      "bonus": { "cha": 2, "int": 1 },
+      "flags": ["noble_manners"],
+      "equipment": [ { "de": "Siegelring eines Adelshauses", "en": "signet ring of a noble house" }, { "de": "feine, abgetragene Kleidung", "en": "fine but worn clothes" } ],
+      "coins": 10
+    },
+    {
+      "id": "deserter",
+      "name": { "de": "[[Deserteur|Deserteurin]]", "en": "Deserter" },
+      "summary": { "de": "im Tross eines Heeres groß geworden und davongelaufen", "en": "grew up in an army's baggage train and ran away" },
+      "description": {
+        "de": "Irgendwer hat dich als kleines Kind im Tross eines Heeres aufgelesen. Du hast Wasser geschleppt, Pfeile gesammelt und schließlich selbst einen Speer getragen – bis du eines Nachts einfach gegangen bist.",
+        "en": "Someone picked you up as a small child in an army's baggage train. You hauled water, gathered arrows and finally carried a spear yourself – until one night you simply walked away."
+      },
+      "consequences": {
+        "de": "Du kennst Befehle, Signale und Patrouillen. Soldaten könnten dich wiedererkennen – und auf Fahnenflucht steht der Strang.",
+        "en": "You know orders, signals and patrols. Soldiers might recognise you – and desertion is punished by the rope."
+      },
+      "bonus": { "con": 2, "str": 1 },
+      "flags": ["wanted_by_army"],
+      "equipment": [ { "de": "zerschlissener Soldatenmantel", "en": "tattered soldier's coat" } ],
+      "coins": 3
+    },
+    {
+      "id": "gutter_child",
+      "name": { "de": "Gossenkind", "en": "Gutter Child" },
+      "summary": { "de": "auf der Straße groß geworden – wie lange schon, weiß niemand", "en": "grew up on the streets – for how long, no one knows" },
+      "description": {
+        "de": "Solange du denken kannst, war die Gasse dein Zuhause. Wer deine Eltern waren und wann du geboren wurdest, hat dir nie jemand gesagt.",
+        "en": "For as long as you can remember, the alley was your home. No one ever told you who your parents were or when you were born."
+      },
+      "consequences": {
+        "de": "Du sprichst die Gaunersprache und kennst Leute, die man besser nicht kennt. Stadtwachen trauen dir nicht über den Weg.",
+        "en": "You speak thieves' cant and know people better left unknown. Town guards don't trust you an inch."
+      },
+      "bonus": { "dex": 2, "wis": 1 },
+      "flags": ["thieves_cant"],
+      "coins": 1
+    },
+    {
+      "id": "runaway_foundling",
+      "name": { "de": "Entlaufenes Klosterkind", "en": "Runaway Foundling" },
+      "summary": { "de": "als Säugling vor der Klosterpforte gefunden, über die Mauer geflohen", "en": "found as a baby at a monastery gate, fled over the wall" },
+      "description": {
+        "de": "Man fand dich eines Wintermorgens in einem Korb vor der Klosterpforte. Die Mönche zogen dich auf, streng und ohne viel Wärme. Vor Kurzem bist du über die Mauer geklettert und nicht zurückgekehrt.",
+        "en": "You were found one winter morning in a basket at the monastery gate. The monks raised you, strictly and without much warmth. Not long ago you climbed over the wall and never went back."
+      },
+      "consequences": {
+        "de": "Du liest die alte Kirchenschrift und kennst heilige Orte. Das Kloster will dich zurück – und hat Mittel und Wege, dich zu finden.",
+        "en": "You read the old church script and know holy places. The monastery wants you back – and has ways to find you."
+      },
+      "bonus": { "wis": 2, "int": 1 },
+      "flags": ["sought_by_monastery"],
+      "equipment": [ { "de": "Novizenkutte", "en": "novice's habit" } ]
+    },
+    {
+      "id": "borderland_refugee",
+      "name": { "de": "Grenzlandflüchtling", "en": "Borderland Refugee" },
+      "summary": { "de": "dein Dorf brannte, als du klein warst – du hast überlebt", "en": "your village burned when you were small – you survived" },
+      "description": {
+        "de": "Dein Dorf im Grenzland ging in Flammen auf, als du noch klein warst. Von deiner Familie weißt du nichts, nur dass du gerannt bist, bis die Nacht vorbei war.",
+        "en": "Your village in the borderlands went up in flames when you were small. You know nothing of your family, only that you ran until the night was over."
+      },
+      "consequences": {
+        "de": "Du kennst die Wildnis und bist Entbehrung gewohnt. Doch in manchen Nächten kehrt zurück, was du damals gesehen hast – und irgendwann wirst du wissen wollen, was es war.",
+        "en": "You know the wilds and are used to hardship. But on some nights what you saw back then returns – and one day you will want to know what it was."
+      },
+      "bonus": { "con": 2, "wis": 1 },
+      "flags": ["haunted_by_the_past"],
+      "coins": 2
+    },
+    {
+      "id": "debtor",
+      "name": { "de": "[[Schuldner|Schuldnerin]]", "en": "Debtor" },
+      "summary": { "de": "hat sich Geld geliehen – bei den falschen Leuten", "en": "borrowed money – from the wrong people" },
+      "description": {
+        "de": "Du wolltest neu anfangen und hast dir dafür Geld geliehen. Der Mann, der es dir gab, lächelte zu freundlich. Seitdem schläfst du schlecht.",
+        "en": "You wanted a fresh start and borrowed money for it. The man who gave it to you smiled too kindly. You have slept badly ever since."
+      },
+      "consequences": {
+        "de": "Du startest mit einem prall gefüllten Beutel. Doch dein Gläubiger sucht dich, und er vergisst keine Schuld.",
+        "en": "You start with a well-filled purse. But your creditor is looking for you, and he forgets no debt."
+      },
+      "bonus": { "cha": 2, "dex": 1 },
+      "flags": ["hunted_by_creditor"],
+      "coins": 25
+    }
+  ],
+  "traits": [
+    {
+      "id": "alert",
+      "name": { "de": "Wachsam", "en": "Alert" },
+      "description": { "de": "Dich überrascht so schnell nichts. Du bist im Vorteil, wenn du Gefahren bemerken willst (Wahrnehmung).", "en": "Little takes you by surprise. You have advantage when you watch for danger (Perception)." },
+      "advantages": ["perception"],
+      "features": [ { "id": "alert", "name": { "de": "Wachsam", "en": "Alert" }, "description": { "de": "Man kann dich kaum überrumpeln.", "en": "You are hard to catch off guard." } } ]
+    },
+    {
+      "id": "tough",
+      "name": { "de": "Zäh", "en": "Tough" },
+      "description": { "de": "Du hältst mehr aus als andere: zwei zusätzliche Trefferpunkte pro Stufe.", "en": "You can take more than others: two extra hit points per level." },
+      "hpPerLevel": 2
+    },
+    {
+      "id": "lucky",
+      "name": { "de": "Glückspilz", "en": "Lucky" },
+      "description": { "de": "Das Glück ist mit dir: Misslingt eine Probe, würfelst du noch einmal – so oft, wie dein Übungsbonus beträgt, bis zur nächsten Stufe.", "en": "Luck is on your side: when a check fails, you roll again – as often as your proficiency bonus, until your next level." },
+      "luck": true
+    },
+    {
+      "id": "sharp_gaze",
+      "name": { "de": "Scharfer Blick", "en": "Sharp Gaze" },
+      "description": { "de": "Dir entgeht kein Detail. Bei Nachforschungen bist du im Vorteil.", "en": "No detail escapes you. You have advantage on Investigation." },
+      "advantages": ["investigation"]
+    },
+    {
+      "id": "strong",
+      "name": { "de": "Kräftig", "en": "Strong" },
+      "description": { "de": "Stärke +1, und beim Heben, Stemmen und Klettern bist du im Vorteil (Athletik).", "en": "Strength +1, and you have advantage when lifting, pushing and climbing (Athletics)." },
+      "abilityBonus": { "str": 1 },
+      "advantages": ["athletics"]
+    },
+    {
+      "id": "night_owl",
+      "name": { "de": "Nachteule", "en": "Night Owl" },
+      "description": { "de": "Die Nacht ist deine Zeit. Bei Heimlichkeit bist du im Vorteil.", "en": "Night is your time. You have advantage on Stealth." },
+      "advantages": ["stealth"]
+    },
+    {
+      "id": "nimble",
+      "name": { "de": "Flink", "en": "Nimble" },
+      "description": { "de": "Geschicklichkeit +1, und bei Akrobatik bist du im Vorteil.", "en": "Dexterity +1, and you have advantage on Acrobatics." },
+      "abilityBonus": { "dex": 1 },
+      "advantages": ["acrobatics"]
+    },
+    {
+      "id": "people_reader",
+      "name": { "de": "[[Menschenkenner|Menschenkennerin]]", "en": "People Reader" },
+      "description": { "de": "Dir macht so schnell keiner etwas vor. Bei Motiv erkennen bist du im Vorteil.", "en": "Few can fool you. You have advantage on Insight." },
+      "advantages": ["insight"]
+    }
+  ],
+  "names": {
+    "male": ["Alrik", "Bertram", "Falk", "Jorin", "Konrad", "Lenz", "Ruprecht", "Wendelin"],
+    "female": ["Adelheid", "Gesa", "Hedda", "Ida", "Irmel", "Liesbeth", "Mechthild", "Wiebke"]
+  }
+}
