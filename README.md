@@ -62,6 +62,7 @@ engine/   Spiellogik in reinem Kotlin, ohne Android – eigener Gradle-Build
   src/test/…                  Tests der Spiellogik
 app/      Android-App (Jetpack Compose): Oberfläche, Speichern, Sprache
   src/test/…                  Oberflächentests mit Robolectric, erzeugen Screenshots
+art/      Vorlagen der Grafiken (SVG), z. B. die Attributsymbole
 signing/  öffentlicher Beta-Schlüssel und Fingerabdrücke (kein privater Schlüssel!)
 docs/     Spieldesign und Entscheidungen
 ```

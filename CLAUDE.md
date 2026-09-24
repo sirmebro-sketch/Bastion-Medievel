@@ -28,6 +28,8 @@ Bastion Medieval ist ein Text-RPG für Android (Kotlin, Jetpack Compose). Lies z
   `docs/SPIELDESIGN.md`, Abschnitt „Die Spielfigur“).
 - Regeln folgen dem SRD 5.2.1 (CC-BY-4.0); die Namensnennung in README und im Spiel
   („lizenzen“) muss erhalten bleiben. Kein „Dungeons & Dragons“ im Spiel.
+- Grafiken: SVG-Vorlagen in `art/`, in der App als Vektorgrafik (`res/drawable`).
+  Umwandlung mit Androids `Svg2Vector` (Schritte in `art/attribute-icons/README.md`).
 
 ## Bauen und Prüfen
 

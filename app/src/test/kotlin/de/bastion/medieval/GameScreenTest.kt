@@ -2,6 +2,7 @@ package de.bastion.medieval
 
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -84,6 +85,7 @@ class GameScreenTest {
     @Test
     fun pointBuy() {
         show(played(Language.DE, "weiblich", "Wiebke", "Elfe", "Langfinger", "Gossenkind", "Geschick 15", "Konstitution 14"))
+        compose.onAllNodesWithTag("ability-icon").assertCountEquals(6)
         compose.onRoot().captureRoboImage("build/outputs/roborazzi/02_point_buy_de.png")
     }
 

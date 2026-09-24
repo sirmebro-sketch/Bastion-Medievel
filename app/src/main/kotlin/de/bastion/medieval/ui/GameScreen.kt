@@ -2,6 +2,7 @@ package de.bastion.medieval.ui
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -55,7 +56,9 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -75,6 +78,7 @@ import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -383,7 +387,7 @@ private fun LogParagraph(paragraph: Paragraph, locale: LocaleList, modifier: Mod
             modifier = modifier.fillMaxWidth().padding(vertical = 3.dp),
         )
         Paragraph.Kind.ROLL -> RollLine(paragraph.text, modifier)
-        Paragraph.Kind.TABLE -> Table(paragraph.text, modifier)
+        Paragraph.Kind.TABLE -> Table(paragraph.text, locale, modifier)
     }
 }
 
@@ -447,45 +451,112 @@ private fun D20Mark(modifier: Modifier) {
 
 /**
  * Rows separated by line breaks, columns by tabs. Tables with three or more columns
- * treat the first row as a header; two-column tables are key/value lists.
+ * treat the first row as a header; two-column tables are key/value lists. A row whose
+ * first cell names an ability gets the ability's symbol in front.
  */
 @Composable
-private fun Table(text: String, modifier: Modifier) {
+private fun Table(text: String, locale: LocaleList, modifier: Modifier) {
     val rows = text.split('\n').map { it.split('\t') }
     val columns = rows.maxOfOrNull { it.size } ?: 0
     val header = columns >= 3
-    Column(
-        modifier
+    TableGrid(
+        rows = rows.size,
+        columns = columns,
+        header = header,
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp)
             .border(1.dp, Palette.GoldDim.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
             .padding(horizontal = 10.dp, vertical = 6.dp),
-    ) {
-        rows.forEachIndexed { index, cells ->
-            val isHeader = header && index == 0
-            Row(Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
-                cells.forEachIndexed { column, cell ->
-                    val first = column == 0
-                    Text(
-                        cell,
-                        style = TextStyle(
-                            fontFamily = if (isHeader) Fonts.Cinzel else Fonts.Garamond,
-                            fontSize = if (isHeader) 12.sp else 16.sp,
-                            fontWeight = if (!first && !isHeader && columns == 2) FontWeight.SemiBold else FontWeight.Normal,
-                            color = if (isHeader || (first && columns == 2)) Palette.InkMuted else Palette.Ink,
-                            textAlign = if (first) TextAlign.Start else TextAlign.End,
-                        ),
-                        modifier = Modifier.weight(
-                            when {
-                                columns == 2 -> if (first) 1f else 1.5f
-                                first -> 1.8f
-                                else -> 1f
-                            },
-                        ),
-                    )
+    ) { row, column ->
+        val cell = rows[row].getOrElse(column) { "" }
+        val isHeader = header && row == 0
+        val first = column == 0
+        val style = TextStyle(
+            fontFamily = if (isHeader) Fonts.Cinzel else Fonts.Garamond,
+            fontSize = if (isHeader) 12.sp else 16.sp,
+            fontWeight = if (!first && !isHeader && columns == 2) FontWeight.SemiBold else FontWeight.Normal,
+            color = if (isHeader || (first && columns == 2)) Palette.InkMuted else Palette.Ink,
+            textAlign = if (first) TextAlign.Start else TextAlign.End,
+            hyphens = Hyphens.Auto,
+            localeList = locale,
+        )
+        val ability = if (first && !isHeader) abilityNamed(cell) else null
+        if (ability != null) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painterResource(ability.icon),
+                    contentDescription = null,
+                    modifier = Modifier.padding(end = 6.dp).size(24.dp).testTag("ability-icon"),
+                )
+                Text(cell, style = style)
+            }
+        } else {
+            Text(cell, style = style)
+        }
+    }
+}
+
+/**
+ * Every column after the first is as wide as its widest cell; the first column gets the
+ * rest, but at least a third of the width. Where the others don't fit beside that, they
+ * share what is left and wrap.
+ */
+@Composable
+private fun TableGrid(
+    rows: Int,
+    columns: Int,
+    header: Boolean,
+    modifier: Modifier,
+    cell: @Composable (row: Int, column: Int) -> Unit,
+) {
+    Layout(
+        content = {
+            for (row in 0 until rows) {
+                for (column in 0 until columns) {
+                    Box(contentAlignment = if (column == 0) Alignment.CenterStart else Alignment.CenterEnd) { cell(row, column) }
                 }
             }
-            if (isHeader) HorizontalDivider(color = Palette.GoldDim.copy(alpha = 0.5f))
+            if (header) HorizontalDivider(color = Palette.GoldDim.copy(alpha = 0.5f))
+        },
+        modifier = modifier,
+    ) { measurables, constraints ->
+        val width = constraints.maxWidth
+        val gap = 8.dp.roundToPx()
+        val rowPadding = 2.dp.roundToPx()
+        val cells = measurables.take(rows * columns)
+        val widths = IntArray(columns) { column ->
+            if (column == 0) 0 else (0 until rows).maxOf { cells[it * columns + column].maxIntrinsicWidth(Constraints.Infinity) }
+        }
+        val room = width - gap * (columns - 1)
+        val others = widths.sum()
+        if (others > 0 && others > room - width / 3) {
+            val share = (room - width / 3).coerceAtLeast(0).toFloat() / others
+            for (column in 1 until columns) widths[column] = (widths[column] * share).toInt()
+        }
+        widths[0] = (room - widths.sum()).coerceAtLeast(0)
+
+        val placeables = cells.mapIndexed { index, cell -> cell.measure(Constraints.fixedWidth(widths[index % columns])) }
+        val heights = List(rows) { row -> (0 until columns).maxOf { placeables[row * columns + it].height } }
+        val divider = if (header) measurables.last().measure(Constraints.fixedWidth(width)) else null
+        val height = heights.sum() + 2 * rowPadding * rows + (divider?.height ?: 0)
+
+        layout(width, height) {
+            var y = 0
+            for (row in 0 until rows) {
+                y += rowPadding
+                var x = 0
+                for (column in 0 until columns) {
+                    val placeable = placeables[row * columns + column]
+                    placeable.place(x, y + (heights[row] - placeable.height) / 2)
+                    x += widths[column] + gap
+                }
+                y += heights[row] + rowPadding
+                if (row == 0 && divider != null) {
+                    divider.place(0, y)
+                    y += divider.height
+                }
+            }
         }
     }
 }

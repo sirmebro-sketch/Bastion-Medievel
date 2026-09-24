@@ -11,7 +11,7 @@ offen ist. Es wird mit dem Spiel fortgeschrieben.
 | Netz | Vollständig offline, keine Internet-Berechtigung | Wunsch des Projekts; der Build bricht ab, falls je eine Internet-Berechtigung in die APK gerät. |
 | Sprache | Deutsch zuerst, Englisch immer vollständig mitgepflegt | Jeder Text hat `de` und `en`; fehlende Übersetzungen lassen die Tests fehlschlagen. |
 | Eingabe | Freie Texteingabe als Kern, Vorschläge als Knöpfe zum Ausweichen | Das Spiel ist auf Tippen ausgelegt; die Knöpfe helfen, wenn man nicht weiter weiß. |
-| Optik | Pergamentseite im Lederrahmen, Gold und Weinrot; Cinzel, EB Garamond, Fraktur-Initialen | Mittelalterlich, aber gut lesbar für lange Texte. |
+| Optik | Pergamentseite im Lederrahmen, Gold und Weinrot; Cinzel, EB Garamond, Fraktur-Initialen; eigene Attributsymbole (Pentagone, `art/attribute-icons`) | Mittelalterlich, aber gut lesbar für lange Texte. |
 | Architektur | Engine (reines Kotlin) getrennt von der App; Welt als Daten (`world.json`) | Die Welt kann wachsen, ohne dass der Code unübersichtlich wird; die Logik ist ohne Android testbar. |
 
 ## Der Parser
