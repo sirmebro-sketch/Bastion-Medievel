@@ -1,0 +1,45 @@
+# Hinweise für Claude-Sitzungen
+
+Bastion Medieval ist ein Text-RPG für Android (Kotlin, Jetpack Compose). Lies zuerst
+`README.md` und `docs/SPIELDESIGN.md`.
+
+## Arbeitsweise mit dem Projektinhaber
+
+- Kommunikation auf Deutsch, ausführlich, geprüft und mit verifizierten Quellen.
+- Bei jeder Änderung, die in `main` landet, baut GitHub Actions eine APK. Claude ist
+  dafür verantwortlich, dass dieser Build grün ist und eine APK entsteht.
+- Neue Arbeit zuerst auf dem Arbeitsbranch pushen und den Beta-Build abwarten, dann
+  erst nach `main` übernehmen.
+- Englisch im Code und in Bezeichnern, korrekt geschrieben: „Medieval“ (der
+  Repository-Name „Bastion-Medievel“ bleibt bewusst so).
+
+## Regeln für Inhalte
+
+- Jeder Spieltext existiert auf Deutsch **und** Englisch (`LocalizedText`). Deutsch ist
+  die Hauptsprache.
+- Dinge und Figuren nur mit Grundformen anlegen (`noun`, `gender`, Adjektiv-Stämme);
+  Artikel und Fälle erzeugt `GermanNoun`.
+- Nach Änderungen an `world.json` müssen `WorldTest` (Konsistenz) und die übrigen
+  Engine-Tests grün sein.
+- Die App darf keine Internet-Berechtigung bekommen; CI prüft das.
+
+## Bauen und Prüfen
+
+- Engine: `./gradlew -p engine test` – läuft ohne Android-SDK.
+- App: nur in CI, falls die Umgebung `dl.google.com` nicht erreicht (Google-Maven
+  leitet dorthin weiter). CI-Workflow: `.github/workflows/android.yml`.
+- Screenshots der Oberfläche erzeugt CI mit Roborazzi und legt sie auf den Branch
+  `ci-screenshots` (wird bei jedem Push überschrieben):
+  `git fetch origin ci-screenshots && git show origin/ci-screenshots:01_opening_de.png > /tmp/x.png`
+- Versionen stammen aus Googles eigenen Beispielen (compose-samples, nowinandroid);
+  beim Aktualisieren wieder dort abgleichen.
+- In Cloud-Sitzungen mit gedrosseltem Maven Central hilft lokal (nicht im Repo) ein
+  Gradle-Init-Skript, das auf `https://maven-central.storage-download.googleapis.com/maven2/`
+  umleitet.
+
+## Signieren
+
+- Beta: öffentlicher Testschlüssel `signing/beta.keystore`, App-ID `de.bastion.medieval.beta`.
+- Release (`main`): privater Schlüssel nur als Repository-Secret (`BASTION_*`), geprüft
+  gegen `signing/release-certificate-sha256.txt`. Niemals einen privaten Schlüssel
+  committen.

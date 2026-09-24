@@ -28,14 +28,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
 
+      # Like android/nowinandroid: accept the licenses and let the Android Gradle
+      # plugin download the SDK platform that compileSdk asks for.
       - uses: android-actions/setup-android@v3
-        with:
-          packages: 'platform-tools platforms;android-37 build-tools;36.0.0'
+
+      - name: Accept SDK licenses
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager --list 2>/dev/null | grep -E "^ *platforms;android-3[6-9]" | sort -u || true
 
       - uses: gradle/actions/setup-gradle@v4
 
