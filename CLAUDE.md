@@ -26,8 +26,20 @@ Bastion Medieval ist ein Text-RPG für Android (Kotlin, Jetpack Compose). Lies z
 ## Bauen und Prüfen
 
 - Engine: `./gradlew -p engine test` – läuft ohne Android-SDK.
-- App: nur in CI, falls die Umgebung `dl.google.com` nicht erreicht (Google-Maven
-  leitet dorthin weiter). CI-Workflow: `.github/workflows/android.yml`.
+- App lokal: Die Cloud-Umgebung des Projekts hat vollen Netzzugriff (seit 24.09.2026).
+  Das Android-SDK ist in einer neuen Sitzung nicht vorinstalliert:
+  ```
+  export ANDROID_HOME=/opt/android-sdk
+  # Kommandozeilentools: neueste commandlinetools-linux-*_latest.zip von dl.google.com
+  # nach $ANDROID_HOME/cmdline-tools/latest entpacken, dann:
+  yes | $ANDROID_HOME/cmdline-tools/latest/bin/android --sdk=$ANDROID_HOME sdk install \
+    platforms/android-37.0 build-tools/37.0.0 platform-tools
+  printf 'sdk.dir=%s\n' "$ANDROID_HOME" > local.properties
+  ./gradlew :app:testDebugUnitTest :app:assembleDebug
+  ```
+  Die Plattform heißt `android-37.0`, nicht `android-37`. Screenshots lokal:
+  `./gradlew :app:recordRoborazziDebug` → `app/build/outputs/roborazzi/`.
+- CI-Workflow: `.github/workflows/android.yml`.
 - Screenshots der Oberfläche erzeugt CI mit Roborazzi und legt sie auf den Branch
   `ci-screenshots` (wird bei jedem Push überschrieben):
   `git fetch origin ci-screenshots && git show origin/ci-screenshots:01_opening_de.png > /tmp/x.png`
