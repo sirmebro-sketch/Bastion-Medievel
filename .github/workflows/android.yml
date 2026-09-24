@@ -33,9 +33,11 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      # Like android/nowinandroid: accept the licenses and let the Android Gradle
-      # plugin download the SDK platform that compileSdk asks for.
+      # Accept the licenses and let the Android Gradle plugin download the SDK platform
+      # that compileSdk asks for. The action's default package "tools" no longer exists.
       - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
 
       - name: Accept SDK licenses
         run: |
