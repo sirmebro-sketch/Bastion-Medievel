@@ -117,10 +117,13 @@ jobs:
           APK=app/build/outputs/apk/release/app-release.apk
           test -s "$APK"
           BUILD_TOOLS="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
-          "$BUILD_TOOLS/apksigner" verify --print-certs "$APK" > "$RUNNER_TEMP/signature.txt"
-          ACTUAL=$(sed -n 's/^Signer #1 certificate SHA-256 digest: //p' "$RUNNER_TEMP/signature.txt" | tr -d '\r\n ')
+          echo "Build tools: $BUILD_TOOLS"
+          "$BUILD_TOOLS/apksigner" verify --verbose --print-certs "$APK" | tee "$RUNNER_TEMP/signature.txt"
+          # Every signer line (v1–v3.1, "Signer #1" or "Signer (minSdkVersion=…)") must carry the pinned key.
+          DIGESTS=$(grep -oE "certificate SHA-256 digest: [0-9a-f]{64}" "$RUNNER_TEMP/signature.txt" | awk '{print $4}' | sort -u)
           EXPECTED=$(tr -d '\r\n ' < "$PIN")
-          [[ "$ACTUAL" == "$EXPECTED" ]] || { echo "::error::APK is signed with an unexpected key."; exit 1; }
+          [[ -n "$DIGESTS" && "$DIGESTS" == "$EXPECTED" ]] || {
+            echo "::error::APK is signed with an unexpected key. Expected $EXPECTED, found: $(echo $DIGESTS)"; exit 1; }
           "$BUILD_TOOLS/aapt2" dump permissions "$APK" | tee "$RUNNER_TEMP/permissions.txt"
           if grep -q "android.permission.INTERNET" "$RUNNER_TEMP/permissions.txt"; then
             echo "::error::The APK requests internet access, but the game must stay offline."; exit 1
