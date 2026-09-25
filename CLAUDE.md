@@ -21,8 +21,8 @@ Bastion Medieval ist ein Text-RPG für Android (Kotlin, Jetpack Compose). Lies z
 - Die Welt und ihre Geschichte bestimmt allein der Projektinhaber. Alle bisherigen
   Spieltexte (Testgebiet in `world.json`, Beschreibungen von Völkern, Werdegängen,
   Hintergründen und Merkmalen in `character.json`) sind Platzhalter von Claude und
-  werden nach seiner Welt neu geschrieben. Eigene Ideen immer als Vorschlag
-  kennzeichnen, nie als Teil der Welt behandeln.
+  werden nach der Welt des Projektinhabers neu geschrieben. Eigene Ideen immer als
+  Vorschlag kennzeichnen, nie als Teil der Welt behandeln.
 - Jeder Spieltext existiert auf Deutsch **und** Englisch (`LocalizedText`). Deutsch ist
   die Hauptsprache.
 - Dinge und Figuren nur mit Grundformen anlegen (`noun`, `gender`, Adjektiv-Stämme);
