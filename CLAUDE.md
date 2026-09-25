@@ -6,6 +6,9 @@ Bastion Medieval ist ein Text-RPG für Android (Kotlin, Jetpack Compose). Lies z
 ## Arbeitsweise mit dem Projektinhaber
 
 - Kommunikation auf Deutsch, ausführlich, geprüft und mit verifizierten Quellen.
+  Das gilt für **alles**, was der Projektinhaber liest: Antworten, kurze
+  Zwischenmeldungen während der Arbeit, Beschreibungen von Befehlen und
+  Bildunterschriften. Englisch nur in Code, Bezeichnern und Commit-Nachrichten.
 - Bei jeder Änderung, die in `main` landet, baut GitHub Actions eine APK. Claude ist
   dafür verantwortlich, dass dieser Build grün ist und eine APK entsteht.
 - Neue Arbeit zuerst auf dem Arbeitsbranch pushen und den Beta-Build abwarten, dann
