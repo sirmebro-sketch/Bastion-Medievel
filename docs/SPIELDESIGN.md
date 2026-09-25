@@ -79,7 +79,7 @@ Welt bekannt sind; in späteren Durchgängen kommen weitere Namen hinzu.
 | Harter / Harte | Hard | Dunkelsicht, Steingespür, Unverwüstlich (Gift), +1 TP je Stufe, geübt in Täuschen (Schmiede und Händler) |
 | Geist | Ghost | Dunkelsicht, Wenig Atem, geübt in Wahrnehmung |
 | Apokalypt / Apokalyptin | Apocalypt | Apokalyptenglück (1 neu würfeln), Tapferkeit, Vorteil bei Heimlichkeit, geübt in Überlebenskunst (Jäger und Entdecker), Sprachenkundig |
-| Erdling / Erdlinge | Earthling | noch keine; erst nach dem ersten Durchspielen spielbar, zum Testen vorerst wählbar |
+| Erdling | Earthling | noch keine; erst nach dem ersten Durchspielen spielbar, zum Testen vorerst wählbar |
 
 Die Beschreibungstexte der Völker stützen sich auf die Welt des Projektinhabers und
 verraten nur, was dort allgemein bekannt ist. Ausführlichere Fähigkeiten, Stärken und

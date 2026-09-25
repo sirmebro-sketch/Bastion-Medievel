@@ -40,7 +40,7 @@ class CharacterRulesTest {
         assertEquals("Knappin", rules.career("squire").name.render(Language.DE, female))
         assertEquals("Harte", rules.species("dwarf").name.render(Language.DE, female))
         assertEquals("Erdling", rules.species("earthling").name.render(Language.DE, male))
-        assertEquals("Erdlinge", rules.species("earthling").name.render(Language.DE, female))
+        assertEquals("Erdling", rules.species("earthling").name.render(Language.DE, female))
     }
 
     @Test
