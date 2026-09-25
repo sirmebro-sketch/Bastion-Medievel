@@ -1,7 +1,13 @@
 # Spieldesign – Bastion Medieval
 
-Stand: 24.09.2026. Dieses Dokument hält fest, was entschieden ist und was noch
+Stand: 25.09.2026. Dieses Dokument hält fest, was entschieden ist und was noch
 offen ist. Es wird mit dem Spiel fortgeschrieben.
+
+> **Platzhalter:** Die Welt stammt allein vom Projektinhaber. Alle bisherigen
+> Spieltexte – das Testgebiet sowie die Beschreibungen von Völkern, Werdegängen,
+> Hintergründen und Merkmalen – hat Claude nur als Platzhalter geschrieben; sie
+> werden nach der Welt des Projektinhabers ersetzt. Entschieden sind die Regeln
+> und Abläufe unten, nicht diese Texte.
 
 ## Entschiedene Grundlagen
 
