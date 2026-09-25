@@ -7,7 +7,7 @@ Bordeauxrot, Altgold und Dunkelbraun.
 | Datei | Attribut | Motiv | In der App |
 |---|---|---|---|
 | `staerke.svg` | Stärke | gekreuzte Hanteln | `ic_ability_strength` |
-| `geschicklichkeit.svg` | Geschicklichkeit | Bogen mit Pfeil | `ic_ability_dexterity` |
+| `geschicklichkeit.svg` | Geschick | Bogen mit Pfeil | `ic_ability_dexterity` |
 | `konstitution.svg` | Konstitution | Herz mit Puls | `ic_ability_constitution` |
 | `intelligenz.svg` | Intelligenz | offenes Buch mit Stern | `ic_ability_intelligence` |
 | `weisheit.svg` | Weisheit | Auge | `ic_ability_wisdom` |

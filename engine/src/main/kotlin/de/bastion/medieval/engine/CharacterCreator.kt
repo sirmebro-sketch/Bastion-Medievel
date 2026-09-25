@@ -445,7 +445,7 @@ class CharacterCreator(private val rules: CharacterRules) {
         private val DOWN_WORDS = Words.foldAll(listOf("minus", "runter", "weniger", "down", "less"))
         private val ABILITY_ALIASES = mapOf(
             Ability.STRENGTH to setOf("st", "kraft"),
-            Ability.DEXTERITY to setOf("ge", "geschick", "gewandtheit"),
+            Ability.DEXTERITY to setOf("ge", "geschicklichkeit", "gewandtheit"),
             Ability.CONSTITUTION to setOf("ko", "konsti", "ausdauer"),
             Ability.INTELLIGENCE to setOf("klugheit", "verstand"),
             Ability.WISDOM to setOf("weise"),

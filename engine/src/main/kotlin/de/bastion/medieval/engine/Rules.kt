@@ -12,7 +12,7 @@ private fun t(de: String, en: String) = LocalizedText(de, en)
 @Serializable
 enum class Ability(val displayName: LocalizedText, val short: LocalizedText) {
     @SerialName("str") STRENGTH(t("Stärke", "Strength"), t("STÄ", "STR")),
-    @SerialName("dex") DEXTERITY(t("Geschicklichkeit", "Dexterity"), t("GES", "DEX")),
+    @SerialName("dex") DEXTERITY(t("Geschick", "Dexterity"), t("GES", "DEX")),
     @SerialName("con") CONSTITUTION(t("Konstitution", "Constitution"), t("KON", "CON")),
     @SerialName("int") INTELLIGENCE(t("Intelligenz", "Intelligence"), t("INT", "INT")),
     @SerialName("wis") WISDOM(t("Weisheit", "Wisdom"), t("WEI", "WIS")),

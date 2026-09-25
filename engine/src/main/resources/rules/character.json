@@ -388,7 +388,7 @@
     {
       "id": "nimble",
       "name": { "de": "Flink", "en": "Nimble" },
-      "description": { "de": "Geschicklichkeit +1, und bei Akrobatik bist du im Vorteil.", "en": "Dexterity +1, and you have advantage on Acrobatics." },
+      "description": { "de": "Geschick +1, und bei Akrobatik bist du im Vorteil.", "en": "Dexterity +1, and you have advantage on Acrobatics." },
       "abilityBonus": { "dex": 1 },
       "advantages": ["acrobatics"]
     },

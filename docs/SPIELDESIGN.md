@@ -40,8 +40,9 @@ Entschieden am 24.09.2026 mit dem Projektinhaber.
 ### Regelgrundlage
 Die Werte folgen dem etablierten System der fünften Edition, genauer dem
 **Systemreferenzdokument 5.2.1** (offizielle deutsche Fassung, CC-BY-4.0):
-sechs Attribute (Stärke, Geschicklichkeit, Konstitution, Intelligenz, Weisheit,
-Charisma), 18 Fertigkeiten, Proben mit W20 + Modifikator (+ Übungsbonus) gegen
+sechs Attribute (Stärke, Geschick, Konstitution, Intelligenz, Weisheit, Charisma;
+„Geschick“ heißt im SRD „Geschicklichkeit“ – bei uns kürzer, damit es neben sein
+Symbol passt), 18 Fertigkeiten, Proben mit W20 + Modifikator (+ Übungsbonus) gegen
 einen Schwierigkeitsgrad (SG), Vorteil/Nachteil, Stufen 1–20 nach
 Erfahrungspunkten. Die vorgeschriebene Namensnennung steht im Spiel unter
 „Lizenzen“. Der Name „Dungeons & Dragons“ wird nicht verwendet; erlaubt ist

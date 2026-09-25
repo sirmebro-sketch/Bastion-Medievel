@@ -94,7 +94,8 @@ class CharacterCreatorTest {
         assertTrue("zwischen 8 und 15" in game.say("Stärke 16"))
         game.say("Stärke 15")
         game.say("Konstitution 15")
-        game.say("Geschick 15")
+        game.say("Geschicklichkeit 15") // the SRD name still works
+        assertEquals(15, game.state.creation!!.scores[Ability.DEXTERITY])
         assertTrue("reichen deine Punkte nicht" in game.say("Weisheit 12"))
         assertEquals(27, Rules.pointsSpent(game.state.creation!!.scores))
         game.say("Stärke -")
