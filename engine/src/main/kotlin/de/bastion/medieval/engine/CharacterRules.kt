@@ -53,6 +53,8 @@ data class CareerDef(
     val advantages: List<Skill> = emptyList(),
     val equipment: List<LocalizedText> = emptyList(),
     val coins: Int = 0,
+    /** The peoples who can have this former life; empty means every people. */
+    val species: List<String> = emptyList(),
 )
 
 /**
@@ -100,6 +102,10 @@ data class CharacterRules(
 ) {
     fun species(id: String): SpeciesDef = species.first { it.id == id }
     fun career(id: String): CareerDef = careers.first { it.id == id }
+
+    /** The former lives open to [speciesId], or all of them while no people is chosen. */
+    fun careersFor(speciesId: String?): List<CareerDef> =
+        careers.filter { it.species.isEmpty() || speciesId == null || speciesId in it.species }
     fun background(id: String): BackgroundDef = backgrounds.first { it.id == id }
     fun trait(id: String): TraitDef = traits.first { it.id == id }
 
@@ -148,6 +154,10 @@ data class CharacterRules(
             }
             if (c.hitDie !in listOf(6, 8, 10, 12)) add("$where: hit die must be d6, d8, d10 or d12")
             c.equipment.forEachIndexed { i, e -> text("$where equipment[$i]", e) }
+            c.species.filter { id -> species.none { it.id == id } }.forEach { add("$where: unknown people '$it'") }
+        }
+        for (s in species) {
+            if (careersFor(s.id).isEmpty()) add("Species '${s.id}' has no former life to choose")
         }
         for (b in backgrounds) {
             val where = "Background '${b.id}'"

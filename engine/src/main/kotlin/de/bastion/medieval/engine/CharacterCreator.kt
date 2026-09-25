@@ -66,7 +66,7 @@ class CharacterCreator(private val rules: CharacterRules) {
                 Paragraph(Kind.HINT, T.nameHint[language]),
             )
             CreationStep.SPECIES -> choice(T.speciesTitle, T.speciesQuestion, speciesOptions(), language, ctx)
-            CreationStep.CAREER -> choice(T.careerTitle, T.careerQuestion, careerOptions(), language, ctx)
+            CreationStep.CAREER -> choice(T.careerTitle, T.careerQuestion, careerOptions(state), language, ctx)
             CreationStep.BACKGROUND -> choice(T.backgroundTitle, T.backgroundQuestion, backgroundOptions(), language, ctx)
             CreationStep.ABILITIES -> listOf(
                 Paragraph(Kind.TITLE, T.abilitiesTitle[language]),
@@ -93,7 +93,7 @@ class CharacterCreator(private val rules: CharacterRules) {
                 names.take(6).map { Suggestion(it, it) } + back
             }
             CreationStep.SPECIES -> speciesOptions().map { it.suggestion(language, ctx) } + back
-            CreationStep.CAREER -> careerOptions().map { it.suggestion(language, ctx) } + back
+            CreationStep.CAREER -> careerOptions(state).map { it.suggestion(language, ctx) } + back
             CreationStep.BACKGROUND -> backgroundOptions().map { it.suggestion(language, ctx) } + back
             CreationStep.ABILITIES -> listOf(
                 Suggestion(T.recommendLabel[language], T.recommendCommand[language]),
@@ -123,7 +123,7 @@ class CharacterCreator(private val rules: CharacterRules) {
             CreationStep.GENDER -> chooseGender(state, tokens, language)
             CreationStep.NAME -> chooseName(state, input, language)
             CreationStep.SPECIES -> choose(state, tokens, speciesOptions(), language) { s, id -> s.copy(species = id).fitToSpecies(rules) }
-            CreationStep.CAREER -> choose(state, tokens, careerOptions(), language) { s, id ->
+            CreationStep.CAREER -> choose(state, tokens, careerOptions(state), language) { s, id ->
                 s.copy(career = id, extraSkill = s.extraSkill?.takeIf { it !in rules.career(id).skills })
             }
             CreationStep.BACKGROUND -> choose(state, tokens, backgroundOptions(), language) { s, id -> s.copy(background = id) }
@@ -338,7 +338,7 @@ class CharacterCreator(private val rules: CharacterRules) {
         }
     }
 
-    private fun careerOptions() = rules.careers.map { c ->
+    private fun careerOptions(state: CreationState) = rules.careersFor(state.species).map { c ->
         Option(c.id, c.name, c.summary, aliases(c.name)) { language, ctx ->
             listOf(
                 Paragraph(Kind.TEXT, c.description.render(language, ctx)),
@@ -419,7 +419,10 @@ class CharacterCreator(private val rules: CharacterRules) {
 
     private fun CreationState.fitToSpecies(rules: CharacterRules): CreationState {
         val chosen = rules.species(requireNotNull(species))
+        // A former life this people cannot have is asked again.
+        val keptCareer = career?.takeIf { id -> rules.careersFor(chosen.id).any { it.id == id } }
         return copy(
+            career = keptCareer,
             traits = traits.take(if (chosen.extraTrait) 2 else 1),
             extraSkill = extraSkill.takeIf { chosen.extraSkill },
         )

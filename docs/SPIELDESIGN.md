@@ -76,15 +76,21 @@ Welt bekannt sind; in späteren Durchgängen kommen weitere Namen hinzu.
 | Volk (m / w) | Englisch | Spielwerte (nach SRD, angepasst) |
 |---|---|---|
 | Glatter / Glatte | Smooth | eine Zusatzfertigkeit und ein zweites Merkmal |
-| Harter / Harte | Hard | Dunkelsicht, Steingespür, Unverwüstlich (Gift), +1 TP je Stufe |
+| Harter / Harte | Hard | Dunkelsicht, Steingespür, Unverwüstlich (Gift), +1 TP je Stufe, geübt in Täuschen (Schmiede und Händler) |
 | Geist | Ghost | Dunkelsicht, Wenig Atem, geübt in Wahrnehmung |
-| Apokalypt / Apokalyptin | Apocalypt | Apokalyptenglück (1 neu würfeln), Tapferkeit, Vorteil bei Heimlichkeit |
-| Erdling | Earthling | noch keine; erst nach dem ersten Durchspielen spielbar, zum Testen vorerst wählbar |
+| Apokalypt / Apokalyptin | Apocalypt | Apokalyptenglück (1 neu würfeln), Tapferkeit, Vorteil bei Heimlichkeit, geübt in Überlebenskunst (Jäger und Entdecker), Sprachenkundig |
+| Erdling / Erdlinge | Earthling | noch keine; erst nach dem ersten Durchspielen spielbar, zum Testen vorerst wählbar |
 
 Die Beschreibungstexte der Völker stützen sich auf die Welt des Projektinhabers und
-verraten nur, was dort allgemein bekannt ist.
+verraten nur, was dort allgemein bekannt ist. Ausführlichere Fähigkeiten, Stärken und
+Schwächen je Volk folgen vom Projektinhaber.
 
 ### Werdegänge statt Klassen
+Nicht jedes Volk hat dieselben Werdegänge: Ein Werdegang kann in `character.json`
+mit `"species": [...]` auf bestimmte Völker beschränkt werden (leer = alle). Der
+Editor bietet dann nur passende an und fragt nach einem Volkswechsel neu, wenn der
+Werdegang nicht mehr passt. Die Zuordnung legt der Projektinhaber fest.
+
 Keine Klassen, sondern eine Vorerfahrung. Jeder Werdegang gibt zwei geübte
 Fertigkeiten, eine besondere Fähigkeit, Startausrüstung und – automatisch
 passend – eine **Schwäche** (Nachteil auf eine Fertigkeit):

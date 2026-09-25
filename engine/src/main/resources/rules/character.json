@@ -14,7 +14,7 @@
     {
       "id": "dwarf",
       "name": { "de": "[[Harter|Harte]]", "en": "Hard" },
-      "summary": { "de": "robust und stark, sieht im Dunkeln, kennt sich mit Stein aus", "en": "tough and strong, sees in the dark, knows stone" },
+      "summary": { "de": "robust und stark, sieht im Dunkeln, gewiefter Händler", "en": "tough and strong, sees in the dark, shrewd trader" },
       "description": {
         "de": "Die Harten lebten tief unter der Erde und blieben den Glatten verborgen, bis die Apokalypse kam. Danach stiegen sie aus ihren Städten herauf, um zu überleben. Sie sind kleiner als die Glatten, aber robust und stark, große Schmiedemeister und gewiefte, oft hinterlistige Händler, stets auf den eigenen Vorteil bedacht. Auf den Straßen eilt ihnen ein schlechter Ruf voraus.",
         "en": "The Hard lived deep underground, hidden from the Smooth until the apocalypse came. Then they climbed up out of their cities to survive. They are shorter than the Smooth but tough and strong, great master smiths and shrewd, often devious traders, always out for their own gain. On the roads, a bad reputation goes before them."
@@ -22,8 +22,10 @@
       "features": [
         { "id": "darkvision", "name": { "de": "Dunkelsicht", "en": "Darkvision" }, "description": { "de": "Du siehst im Dunkeln, wenn auch nur in Grautönen.", "en": "You can see in the dark, if only in shades of grey." } },
         { "id": "stonecunning", "name": { "de": "Steingespür", "en": "Stonecunning" }, "description": { "de": "Berührst du Stein, spürst du Hohlräume, verborgene Gänge und Erschütterungen dahinter.", "en": "When you touch stone, you sense hollows, hidden passages and tremors behind it." } },
-        { "id": "dwarven_resilience", "name": { "de": "Unverwüstlich", "en": "Resilient" }, "description": { "de": "Gift kann dir wenig anhaben: Du bist im Vorteil, wenn du ihm widerstehen musst.", "en": "Poison does you little harm: you have advantage when you must resist it." } }
+        { "id": "dwarven_resilience", "name": { "de": "Unverwüstlich", "en": "Resilient" }, "description": { "de": "Gift kann dir wenig anhaben: Du bist im Vorteil, wenn du ihm widerstehen musst.", "en": "Poison does you little harm: you have advantage when you must resist it." } },
+        { "id": "smith_and_trader", "name": { "de": "Schmiede und Händler", "en": "Smiths and Traders" }, "description": { "de": "Du verstehst dich auf Metall und aufs Feilschen – und darauf, andere dabei übers Ohr zu hauen: Du bist in Täuschen geübt.", "en": "You know metal and haggling – and how to get the better of others while you're at it: you are trained in Deception." } }
       ],
+      "skills": ["deception"],
       "hpPerLevel": 1
     },
     {
@@ -43,7 +45,7 @@
     {
       "id": "halfling",
       "name": { "de": "[[Apokalypt|Apokalyptin]]", "en": "Apocalypt" },
-      "summary": { "de": "klein, furchtlos, schwer zu entdecken – und mit Glück gesegnet", "en": "small, fearless, hard to spot – and blessed with luck" },
+      "summary": { "de": "klein, furchtlos, Jäger und Entdecker – mit Glück gesegnet", "en": "small, fearless, hunter and explorer – blessed with luck" },
       "description": {
         "de": "Die Apokalypten sind halb so groß wie die Glatten, sehen ihnen sonst aber zum Verwechseln ähnlich. Sie erschienen erst nach der Apokalypse, und man sagt, sie seien mit ihr gekommen. Sie leben fast nur im Westen, sind ausgezeichnete Jäger, Entdecker und Bauern, lieben gutes Essen und sprechen viele Sprachen dieser Welt.",
         "en": "The Apocalypts are half the height of the Smooth but otherwise look just like them. They appeared only after the apocalypse, and people say they came with it. They live almost only in the west, are excellent hunters, explorers and farmers, love good food and speak many of this world's languages."
@@ -51,13 +53,16 @@
       "features": [
         { "id": "halfling_luck", "name": { "de": "Apokalyptenglück", "en": "Apocalypt Luck" }, "description": { "de": "Würfelst du bei einer Probe eine 1, darfst du noch einmal würfeln.", "en": "When you roll a 1 on a check, you may roll again." } },
         { "id": "brave", "name": { "de": "Tapferkeit", "en": "Brave" }, "description": { "de": "Du bist im Vorteil, wenn du dich gegen Furcht behaupten musst.", "en": "You have advantage when you must stand against fear." } },
-        { "id": "naturally_stealthy", "name": { "de": "Klein und unauffällig", "en": "Small and Unnoticed" }, "description": { "de": "Du verschwindest mühelos hinter Größeren und im Gedränge: Vorteil bei Heimlichkeit.", "en": "You vanish easily behind bigger folk and in crowds: advantage on Stealth." } }
+        { "id": "naturally_stealthy", "name": { "de": "Klein und unauffällig", "en": "Small and Unnoticed" }, "description": { "de": "Du verschwindest mühelos hinter Größeren und im Gedränge: Vorteil bei Heimlichkeit.", "en": "You vanish easily behind bigger folk and in crowds: advantage on Stealth." } },
+        { "id": "hunter_explorer", "name": { "de": "Jäger und Entdecker", "en": "Hunter and Explorer" }, "description": { "de": "Du findest Wild, Wasser und Wege, wo andere sich verlaufen: Du bist in Überlebenskunst geübt.", "en": "You find game, water and paths where others get lost: you are trained in Survival." } },
+        { "id": "many_languages", "name": { "de": "Sprachenkundig", "en": "Many Tongues" }, "description": { "de": "Du sprichst viele der Sprachen dieser Welt und findest dich schnell in neue ein.", "en": "You speak many of this world's languages and pick up new ones quickly." } }
       ],
+      "skills": ["survival"],
       "advantages": ["stealth"]
     },
     {
       "id": "earthling",
-      "name": { "de": "Erdling", "en": "Earthling" },
+      "name": { "de": "[[Erdling|Erdlinge]]", "en": "Earthling" },
       "summary": { "de": "steinern, stark und findig – nur zum Testen wählbar", "en": "stone-bodied, strong and resourceful – selectable for testing only" },
       "description": {
         "de": "Erdlinge haben steinerne Körper und gehen gebeugt, bewegen sich aber grazil und zielbewusst. Sie leben tief unter der Erde, noch tiefer als die Harten, und zeigen sich den anderen Völkern erst seit knapp zwanzig Jahren. Sie sind findig und äußerst stark, ernähren sich von Kohle, Öl und Gas und haben ein Faible für Edelmetalle. (Die Regeln für Erdlinge werden noch geschrieben.)",

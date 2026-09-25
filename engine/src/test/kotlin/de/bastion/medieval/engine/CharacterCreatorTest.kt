@@ -128,6 +128,30 @@ class CharacterCreatorTest {
     }
 
     @Test
+    fun `only former lives open to the chosen people are offered`() {
+        val limited = TestSupport.rules.copy(
+            careers = TestSupport.rules.careers.map { if (it.id == "squire") it.copy(species = listOf("human")) else it },
+        )
+        val game = Game(TestSupport.world, limited, GameState.new(TestSupport.world, seed = 7))
+        fun step() = CharacterCreator(limited).step(requireNotNull(game.state.creation))
+        listOf("männlich", "Falk").forEach(game::say)
+        val offered = game.say("Harter")
+        assertTrue("Raufbold" in offered && "Knappe" !in offered, offered)
+        assertTrue(game.suggestions(Language.DE).none { it.label == "Knappe" })
+        game.say("Knappe")
+        assertEquals(null, game.state.creation!!.career)
+
+        // A squire who becomes one of the Hard has to choose a new former life.
+        game.say("zurück")
+        listOf("Glatter", "Knappe", "Deserteur", "vorschlag", "fertig", "Kräftig", "Zäh", "Religion").forEach(game::say)
+        assertEquals(CreationStep.SUMMARY, step())
+        game.say("Volk ändern")
+        game.say("Harter")
+        assertEquals(CreationStep.CAREER, step())
+        assertEquals(null, game.state.creation!!.career)
+    }
+
+    @Test
     fun `every suggestion during creation is understood`() {
         val game = newGame()
         val answers = listOf("weiblich", "Ida", "Glatte", "Künstlerin", "Grenzlandflüchtling", "vorschlag", "fertig", "Flink", "Zäh", "Religion")

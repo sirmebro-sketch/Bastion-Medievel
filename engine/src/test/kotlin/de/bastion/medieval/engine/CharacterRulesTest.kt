@@ -39,6 +39,29 @@ class CharacterRulesTest {
         assertEquals("Choirgirl", choir.render(Language.EN, female))
         assertEquals("Knappin", rules.career("squire").name.render(Language.DE, female))
         assertEquals("Harte", rules.species("dwarf").name.render(Language.DE, female))
+        assertEquals("Erdling", rules.species("earthling").name.render(Language.DE, male))
+        assertEquals("Erdlinge", rules.species("earthling").name.render(Language.DE, female))
+    }
+
+    @Test
+    fun `peoples bring their own trained skills`() {
+        assertTrue(Skill.DECEPTION in Sheet(TestSupport.character(species = "dwarf", career = "tracker"), rules).proficientSkills)
+        assertTrue(Skill.SURVIVAL in Sheet(TestSupport.character(species = "halfling", career = "scribe"), rules).proficientSkills)
+    }
+
+    @Test
+    fun `former lives can be limited to peoples`() {
+        assertTrue(rules.careers.all { it.species.isEmpty() || it.species.all { id -> rules.species.any { s -> s.id == id } } })
+        val limited = rules.copy(careers = rules.careers.map { if (it.id == "squire") it.copy(species = listOf("human")) else it })
+        assertTrue(limited.careersFor("human").any { it.id == "squire" })
+        assertTrue(limited.careersFor("dwarf").none { it.id == "squire" })
+        assertEquals(rules.careers.size, limited.careersFor(null).size)
+        assertEquals(emptyList(), limited.validate())
+
+        val unknown = rules.copy(careers = rules.careers.map { if (it.id == "squire") it.copy(species = listOf("giant")) else it })
+        assertTrue(unknown.validate().any { "unknown people 'giant'" in it })
+        val nothingLeft = rules.copy(careers = rules.careers.map { it.copy(species = listOf("human")) })
+        assertTrue(nothingLeft.validate().any { "Species 'dwarf' has no former life" in it })
     }
 
     @Test
