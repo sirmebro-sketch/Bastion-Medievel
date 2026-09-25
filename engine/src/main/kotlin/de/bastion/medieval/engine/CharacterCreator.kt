@@ -512,7 +512,7 @@ private object T {
     val colMod = t("Mod.", "Mod.")
     val traitsTitle = t("Dein Merkmal", "Your trait")
     val traitsQuestion = t("Was zeichnet dich aus?", "What sets you apart?")
-    val secondTraitQuestion = t("Als Mensch bist du vielseitig. Wähle ein zweites Merkmal.", "As a human you are versatile. Choose a second trait.")
+    val secondTraitQuestion = t("Als [[Glatter|Glatte]] bist du vielseitig. Wähle ein zweites Merkmal.", "As one of the Smooth you are versatile. Choose a second trait.")
     val skillTitle = t("Deine Begabung", "Your talent")
     val skillQuestion = t("Menschen lernen schnell. In welcher Fertigkeit bist du zusätzlich geübt?", "Humans learn quickly. Which extra skill are you trained in?")
     val summaryQuestion = t(

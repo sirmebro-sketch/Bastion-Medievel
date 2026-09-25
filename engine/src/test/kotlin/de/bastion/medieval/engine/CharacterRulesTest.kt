@@ -38,7 +38,7 @@ class CharacterRulesTest {
         assertEquals("Chormädchen", choir.render(Language.DE, female))
         assertEquals("Choirgirl", choir.render(Language.EN, female))
         assertEquals("Knappin", rules.career("squire").name.render(Language.DE, female))
-        assertEquals("Zwergin", rules.species("dwarf").name.render(Language.DE, female))
+        assertEquals("Harte", rules.species("dwarf").name.render(Language.DE, female))
     }
 
     @Test

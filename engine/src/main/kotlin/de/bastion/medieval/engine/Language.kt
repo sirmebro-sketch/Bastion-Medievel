@@ -20,7 +20,7 @@ enum class Language(val code: String) {
  * translation fails to load instead of silently showing the wrong language.
  *
  * Texts the player reads may adapt to the character (see [render]):
- * - [variants] replace the whole text when their condition matches ("an elf enters…"),
+ * - [variants] replace the whole text when their condition matches ("a Ghost enters…"),
  * - `[[male|female]]` picks a word by the character's gender ("[[Fremder|Fremde]]"),
  * - `{name}` inserts the character's name.
  */

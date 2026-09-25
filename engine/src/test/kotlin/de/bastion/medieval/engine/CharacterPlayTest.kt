@@ -78,8 +78,7 @@ class CharacterPlayTest {
         }
         assertTrue(", Mädchen.“" in martaFirstLine(character(gender = CharacterGender.FEMALE, species = "human")))
         assertTrue(", Junge.“" in martaFirstLine(character(species = "human")))
-        assertTrue("spitzen Ohren" in martaFirstLine(character(species = "elf", gender = CharacterGender.FEMALE)))
-        assertTrue("Eine Elfe in Ebersfurt" in martaFirstLine(character(species = "elf", gender = CharacterGender.FEMALE)))
+        assertTrue("Ein Geist in Ebersfurt" in martaFirstLine(character(species = "elf", gender = CharacterGender.FEMALE)))
         assertTrue("Weihrauch" in martaFirstLine(character(career = "choir_child")))
 
         val noble = playing(character(background = "noble_ward"))
@@ -117,7 +116,7 @@ class CharacterPlayTest {
             val game = playing(character(career = "tracker", species = "halfling", traits = listOf("lucky")), seed)
             listOf("w", "w").forEach(game::say)
             val out = game.submit("untersuche den Brunnen", Language.DE).joinToString("\n") { it.text }
-            if ("Halblingsglück" in out) halflingRerolls++
+            if ("Apokalyptenglück" in out) halflingRerolls++
             if ("Glückspilz: Du würfelst noch einmal" in out) luckRerolls++
         }
         assertTrue(halflingRerolls > 0)

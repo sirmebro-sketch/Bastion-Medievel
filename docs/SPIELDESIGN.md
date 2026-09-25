@@ -66,13 +66,23 @@ Erfahrungspunkten. Die vorgeschriebene Namensnennung steht im Spiel unter
 ### Charaktererschaffung (Ablauf im Spiel)
 1. Geschlecht → 2. Name → 3. Volk → 4. Werdegang → 5. Hintergrund →
 6. Attribute (Punktkauf: 27 Punkte, Werte 8–15, Vorschlag je Werdegang) →
-7. Merkmal (Menschen: zwei) → 8. Zusatzfertigkeit (nur Menschen) →
+7. Merkmal (Glatte: zwei) → 8. Zusatzfertigkeit (nur Glatte) →
 9. Zusammenfassung als Charakterbogen, alles änderbar, dann „los“.
 
 ### Völker
-Mensch, Zwerg, Elf, Halbling (Merkmale nach SRD, für ein Textspiel übersetzt) und
-der **Erdling** – ein eigenes Volk, das noch ausgearbeitet wird (derzeit
-Platzhalter ohne Sonderregeln).
+Im ersten Durchgang zeigt der Charaktereditor die Namen, unter denen die Völker in der
+Welt bekannt sind; in späteren Durchgängen kommen weitere Namen hinzu.
+
+| Volk (m / w) | Englisch | Spielwerte (nach SRD, angepasst) |
+|---|---|---|
+| Glatter / Glatte | Smooth | eine Zusatzfertigkeit und ein zweites Merkmal |
+| Harter / Harte | Hard | Dunkelsicht, Steingespür, Unverwüstlich (Gift), +1 TP je Stufe |
+| Geist | Ghost | Dunkelsicht, Wenig Atem, geübt in Wahrnehmung |
+| Apokalypt / Apokalyptin | Apocalypt | Apokalyptenglück (1 neu würfeln), Tapferkeit, Vorteil bei Heimlichkeit |
+| Erdling | Earthling | noch keine; erst nach dem ersten Durchspielen spielbar, zum Testen vorerst wählbar |
+
+Die Beschreibungstexte der Völker stützen sich auf die Welt des Projektinhabers und
+verraten nur, was dort allgemein bekannt ist.
 
 ### Werdegänge statt Klassen
 Keine Klassen, sondern eine Vorerfahrung. Jeder Werdegang gibt zwei geübte
@@ -101,7 +111,7 @@ Klosterkind, Grenzlandflüchtling, Schuldner.
 ### Wie die Welt reagiert (Werkzeuge für Inhalte)
 - Texte mit `variants` und Bedingungen (`gender`, `species`, `career`,
   `background`, `trait`, `feature`, `flag`) – z. B. begrüßt Marta einen
-  Chorknaben anders als eine Elfe.
+  Chorknaben anders als einen Geist.
 - `[[männlich|weiblich]]` im Text wählt die Form nach Geschlecht, `{name}`
   setzt den Namen ein.
 - Hindernisse mit Proben: verschlossene Wege lassen sich knacken (nur mit der

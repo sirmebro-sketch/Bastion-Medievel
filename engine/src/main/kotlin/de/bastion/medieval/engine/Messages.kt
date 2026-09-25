@@ -113,7 +113,7 @@ internal object Messages {
     val checkFailure = t("Misserfolg", "Failure")
     val advantageNote = t(" (Vorteil, verworfen: {0})", " (advantage, dropped: {0})")
     val disadvantageNote = t(" (Nachteil, verworfen: {0})", " (disadvantage, dropped: {0})")
-    val halflingLuck = t("Halblingsglück: Die 1 zählt nicht, es wird neu gewürfelt.", "Halfling luck: the 1 doesn't count, you roll again.")
+    val halflingLuck = t("Apokalyptenglück: Die 1 zählt nicht, es wird neu gewürfelt.", "Apocalypt luck: the 1 doesn't count, you roll again.")
     val luckUsed = t("Glückspilz: Du würfelst noch einmal ({0} Glückspunkte übrig).", "Lucky: you roll again ({0} luck points left).")
     val xpGained = t("+{0} Erfahrungspunkte", "+{0} experience points")
     val levelUp = t(

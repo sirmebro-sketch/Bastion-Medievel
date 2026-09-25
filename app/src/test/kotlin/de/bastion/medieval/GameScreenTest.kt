@@ -65,7 +65,7 @@ class GameScreenTest {
         )
     }
 
-    private val createdDe = arrayOf("weiblich", "Wiebke", "Elfe", "Langfinger", "Gossenkind", "vorschlag", "fertig", "Wachsam")
+    private val createdDe = arrayOf("weiblich", "Wiebke", "Geist", "Langfinger", "Gossenkind", "vorschlag", "fertig", "Wachsam")
 
     private fun show(state: GameUiState, onSubmit: (String) -> Unit = {}) {
         compose.setContent {
@@ -84,7 +84,7 @@ class GameScreenTest {
 
     @Test
     fun pointBuy() {
-        show(played(Language.DE, "weiblich", "Wiebke", "Elfe", "Langfinger", "Gossenkind", "Geschick 15", "Konstitution 14"))
+        show(played(Language.DE, "weiblich", "Wiebke", "Geist", "Langfinger", "Gossenkind", "Geschick 15", "Konstitution 14"))
         compose.onAllNodesWithTag("ability-icon").assertCountEquals(6)
         compose.onRoot().captureRoboImage("build/outputs/roborazzi/02_point_buy_de.png")
     }
@@ -105,7 +105,7 @@ class GameScreenTest {
 
     @Test
     fun conversationInEnglish() {
-        show(played(Language.EN, "male", "Konrad", "human", "choirboy", "gutter child", "suggestion", "done", "alert", "lucky", "stealth", "begin", "e", "go in", "talk to Marta"))
+        show(played(Language.EN, "male", "Konrad", "smooth", "choirboy", "gutter child", "suggestion", "done", "alert", "lucky", "stealth", "begin", "e", "go in", "talk to Marta"))
         compose.onAllNodesWithText("The Crooked Horn Tavern").assertCountEquals(2)
         compose.onRoot().captureRoboImage("build/outputs/roborazzi/05_tavern_en.png")
     }

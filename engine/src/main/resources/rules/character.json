@@ -2,67 +2,66 @@
   "species": [
     {
       "id": "human",
-      "name": { "de": "Mensch", "en": "Human" },
+      "name": { "de": "[[Glatter|Glatte]]", "en": "Smooth" },
       "summary": { "de": "vielseitig – eine zusätzliche Fertigkeit und ein zweites Merkmal", "en": "versatile – one extra skill and a second trait" },
       "description": {
-        "de": "Menschen findet man überall, vom Fischerdorf bis zur Königsstadt. Was ihnen an Gaben fehlt, machen sie durch Anpassungsfähigkeit wett.",
-        "en": "Humans are found everywhere, from fishing villages to royal cities. What they lack in gifts they make up for in adaptability."
+        "de": "Die Glatten gab es schon vor der Apokalypse, und noch immer stellen sie einen großen Teil der Bevölkerung. Die Städte, Festungen und Wachtürme, die heute noch stehen, haben sie erbaut. Was ihnen an besonderen Gaben fehlt, machen sie durch Vielseitigkeit wett.",
+        "en": "The Smooth were here before the apocalypse, and they still make up a large part of the population. The cities, fortresses and watchtowers still standing today were built by them. What they lack in special gifts they make up for in versatility."
       },
       "extraSkill": true,
       "extraTrait": true
     },
     {
       "id": "dwarf",
-      "name": { "de": "[[Zwerg|Zwergin]]", "en": "Dwarf" },
-      "summary": { "de": "sieht im Dunkeln, spürt Hohlräume im Stein, trotzt Gift", "en": "sees in the dark, senses hollows in stone, shrugs off poison" },
+      "name": { "de": "[[Harter|Harte]]", "en": "Hard" },
+      "summary": { "de": "robust und stark, sieht im Dunkeln, kennt sich mit Stein aus", "en": "tough and strong, sees in the dark, knows stone" },
       "description": {
-        "de": "Zwerge sind klein, breit und zäh wie altes Wurzelholz. Sie vertrauen dem Stein mehr als dem Himmel.",
-        "en": "Dwarves are short, broad and as tough as old root wood. They trust stone more than the sky."
+        "de": "Die Harten lebten tief unter der Erde und blieben den Glatten verborgen, bis die Apokalypse kam. Danach stiegen sie aus ihren Städten herauf, um zu überleben. Sie sind kleiner als die Glatten, aber robust und stark, große Schmiedemeister und gewiefte, oft hinterlistige Händler, stets auf den eigenen Vorteil bedacht. Auf den Straßen eilt ihnen ein schlechter Ruf voraus.",
+        "en": "The Hard lived deep underground, hidden from the Smooth until the apocalypse came. Then they climbed up out of their cities to survive. They are shorter than the Smooth but tough and strong, great master smiths and shrewd, often devious traders, always out for their own gain. On the roads, a bad reputation goes before them."
       },
       "features": [
         { "id": "darkvision", "name": { "de": "Dunkelsicht", "en": "Darkvision" }, "description": { "de": "Du siehst im Dunkeln, wenn auch nur in Grautönen.", "en": "You can see in the dark, if only in shades of grey." } },
         { "id": "stonecunning", "name": { "de": "Steingespür", "en": "Stonecunning" }, "description": { "de": "Berührst du Stein, spürst du Hohlräume, verborgene Gänge und Erschütterungen dahinter.", "en": "When you touch stone, you sense hollows, hidden passages and tremors behind it." } },
-        { "id": "dwarven_resilience", "name": { "de": "Zwergische Unverwüstlichkeit", "en": "Dwarven Resilience" }, "description": { "de": "Gift kann dir wenig anhaben: Du bist im Vorteil, wenn du ihm widerstehen musst.", "en": "Poison does you little harm: you have advantage when you must resist it." } }
+        { "id": "dwarven_resilience", "name": { "de": "Unverwüstlich", "en": "Resilient" }, "description": { "de": "Gift kann dir wenig anhaben: Du bist im Vorteil, wenn du ihm widerstehen musst.", "en": "Poison does you little harm: you have advantage when you must resist it." } }
       ],
       "hpPerLevel": 1
     },
     {
       "id": "elf",
-      "name": { "de": "[[Elf|Elfe]]", "en": "Elf" },
-      "summary": { "de": "sieht im Dunkeln, scharfe Sinne, braucht keinen Schlaf", "en": "sees in the dark, keen senses, needs no sleep" },
+      "name": { "de": "Geist", "en": "Ghost" },
+      "summary": { "de": "sieht im Dunkeln, braucht kaum Luft, scharfe Sinne", "en": "sees in the dark, needs little air, keen senses" },
       "description": {
-        "de": "Elfen sind schlank, langlebig und still. Viele Menschen halten sie für hochmütig, manche für unheimlich.",
-        "en": "Elves are slender, long-lived and quiet. Many humans think them haughty, some think them uncanny."
+        "de": "Man nennt sie Geister. Sie tauchten erst nach der Apokalypse auf, und bis heute weiß kaum jemand, woher sie kamen. Sie sind äußerst klug und gerissen und meisterhaft in der Arbeit mit Stoffen, in Dichtung und Kunst. Sie sehen im Dunkeln und kommen mit erstaunlich wenig Luft aus.",
+        "en": "They are called Ghosts. They appeared only after the apocalypse, and to this day hardly anyone knows where they came from. They are highly intelligent and cunning, and masters of cloth, poetry and art. They see in the dark and get by on remarkably little air."
       },
       "features": [
         { "id": "darkvision", "name": { "de": "Dunkelsicht", "en": "Darkvision" }, "description": { "de": "Du siehst im Dunkeln, wenn auch nur in Grautönen.", "en": "You can see in the dark, if only in shades of grey." } },
-        { "id": "fey_ancestry", "name": { "de": "Feenblut", "en": "Fey Ancestry" }, "description": { "de": "Bezauberung gleitet leichter an dir ab: Du bist im Vorteil, wenn du ihr widerstehst.", "en": "Charms slide off you more easily: you have advantage when you resist them." } },
-        { "id": "trance", "name": { "de": "Trance", "en": "Trance" }, "description": { "de": "Du musst nicht schlafen. Vier Stunden stiller Versenkung genügen dir.", "en": "You don't need to sleep. Four hours of quiet meditation are enough." } }
+        { "id": "little_breath", "name": { "de": "Wenig Atem", "en": "Little Breath" }, "description": { "de": "Du kommst mit äußerst wenig Luft aus. Wo sie dünn oder stickig ist, hältst du lange durch, und du kannst den Atem sehr lange anhalten.", "en": "You get by on very little air. Where it is thin or stale you last a long time, and you can hold your breath for very long." } }
       ],
       "skills": ["perception"]
     },
     {
       "id": "halfling",
-      "name": { "de": "Halbling", "en": "Halfling" },
-      "summary": { "de": "klein, flink, furchtlos – und mit Glück gesegnet", "en": "small, quick, fearless – and blessed with luck" },
+      "name": { "de": "[[Apokalypt|Apokalyptin]]", "en": "Apocalypt" },
+      "summary": { "de": "klein, furchtlos, schwer zu entdecken – und mit Glück gesegnet", "en": "small, fearless, hard to spot – and blessed with luck" },
       "description": {
-        "de": "Halblinge reichen den meisten Menschen kaum bis zur Brust. Sie lieben gutes Essen, warme Stuben und sind erstaunlich schwer zu erschrecken.",
-        "en": "Halflings barely reach most humans' chests. They love good food and warm parlours and are surprisingly hard to frighten."
+        "de": "Die Apokalypten sind halb so groß wie die Glatten, sehen ihnen sonst aber zum Verwechseln ähnlich. Sie erschienen erst nach der Apokalypse, und man sagt, sie seien mit ihr gekommen. Sie leben fast nur im Westen, sind ausgezeichnete Jäger, Entdecker und Bauern, lieben gutes Essen und sprechen viele Sprachen dieser Welt.",
+        "en": "The Apocalypts are half the height of the Smooth but otherwise look just like them. They appeared only after the apocalypse, and people say they came with it. They live almost only in the west, are excellent hunters, explorers and farmers, love good food and speak many of this world's languages."
       },
       "features": [
-        { "id": "halfling_luck", "name": { "de": "Halblingsglück", "en": "Halfling Luck" }, "description": { "de": "Würfelst du bei einer Probe eine 1, darfst du noch einmal würfeln.", "en": "When you roll a 1 on a check, you may roll again." } },
+        { "id": "halfling_luck", "name": { "de": "Apokalyptenglück", "en": "Apocalypt Luck" }, "description": { "de": "Würfelst du bei einer Probe eine 1, darfst du noch einmal würfeln.", "en": "When you roll a 1 on a check, you may roll again." } },
         { "id": "brave", "name": { "de": "Tapferkeit", "en": "Brave" }, "description": { "de": "Du bist im Vorteil, wenn du dich gegen Furcht behaupten musst.", "en": "You have advantage when you must stand against fear." } },
-        { "id": "naturally_stealthy", "name": { "de": "Angeborene Verstohlenheit", "en": "Naturally Stealthy" }, "description": { "de": "Du verschwindest mühelos hinter Größeren und im Gedränge: Vorteil bei Heimlichkeit.", "en": "You vanish easily behind bigger folk and in crowds: advantage on Stealth." } }
+        { "id": "naturally_stealthy", "name": { "de": "Klein und unauffällig", "en": "Small and Unnoticed" }, "description": { "de": "Du verschwindest mühelos hinter Größeren und im Gedränge: Vorteil bei Heimlichkeit.", "en": "You vanish easily behind bigger folk and in crowds: advantage on Stealth." } }
       ],
       "advantages": ["stealth"]
     },
     {
       "id": "earthling",
       "name": { "de": "Erdling", "en": "Earthling" },
-      "summary": { "de": "ein Volk voller Rätsel – mehr wird sich zeigen", "en": "a people full of riddles – more will be revealed" },
+      "summary": { "de": "steinern, stark und findig – nur zum Testen wählbar", "en": "stone-bodied, strong and resourceful – selectable for testing only" },
       "description": {
-        "de": "Über die Erdlinge spricht man nur hinter vorgehaltener Hand. Was sie ausmacht, wirst du erst noch herausfinden. (Die Regeln für Erdlinge werden noch geschrieben.)",
-        "en": "People speak of the Earthlings only in whispers. What sets them apart you have yet to discover. (The rules for Earthlings are still being written.)"
+        "de": "Erdlinge haben steinerne Körper und gehen gebeugt, bewegen sich aber grazil und zielbewusst. Sie leben tief unter der Erde, noch tiefer als die Harten, und zeigen sich den anderen Völkern erst seit knapp zwanzig Jahren. Sie sind findig und äußerst stark, ernähren sich von Kohle, Öl und Gas und haben ein Faible für Edelmetalle. (Die Regeln für Erdlinge werden noch geschrieben.)",
+        "en": "Earthlings have bodies of stone and walk stooped, yet move gracefully and with purpose. They live deep underground, deeper even than the Hard, and have shown themselves to the other peoples only for some twenty years. They are resourceful and immensely strong, feed on coal, oil and gas and have a weakness for precious metals. (The rules for Earthlings are still being written.)"
       },
       "placeholder": true
     }

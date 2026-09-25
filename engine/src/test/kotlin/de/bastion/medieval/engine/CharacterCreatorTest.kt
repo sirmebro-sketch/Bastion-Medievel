@@ -28,7 +28,7 @@ class CharacterCreatorTest {
         game.say("weiblich")
         assertEquals(CreationStep.NAME, game.step())
         assertTrue("Wiebke also." in game.say("Ich heiße Wiebke"))
-        assertTrue("Elfe" in game.say("Elfe"))
+        assertTrue("Geist" in game.say("Geist"))
         val career = game.say("Langfinger")
         assertTrue("Schlösser knacken" in career, career)
         assertTrue("Ungebildet" in career, career)
@@ -60,7 +60,7 @@ class CharacterCreatorTest {
         say("male")
         say("my name is konrad")
         assertEquals("Konrad", game.state.creation!!.name)
-        say("1") // human
+        say("1") // the Smooth
         say("choirboy")
         say("3") // gutter child
         say("str 15 con 14 dex 13")
@@ -90,7 +90,7 @@ class CharacterCreatorTest {
     @Test
     fun `point buy keeps within budget and range`() {
         val game = newGame()
-        listOf("männlich", "Falk", "Zwerg", "Raufbold", "Deserteur").forEach(game::say)
+        listOf("männlich", "Falk", "Harter", "Raufbold", "Deserteur").forEach(game::say)
         assertTrue("zwischen 8 und 15" in game.say("Stärke 16"))
         game.say("Stärke 15")
         game.say("Konstitution 15")
@@ -109,11 +109,11 @@ class CharacterCreatorTest {
     @Test
     fun `back and changes from the summary`() {
         val game = newGame()
-        listOf("weiblich", "Hedda", "Halbling").forEach(game::say)
+        listOf("weiblich", "Hedda", "Apokalyptin").forEach(game::say)
         assertEquals(CreationStep.CAREER, game.step())
         game.say("zurück")
         assertEquals(CreationStep.SPECIES, game.step())
-        listOf("Zwergin", "Knappin", "Schuldnerin", "vorschlag", "fertig", "Kräftig").forEach(game::say)
+        listOf("Harte", "Knappin", "Schuldnerin", "vorschlag", "fertig", "Kräftig").forEach(game::say)
         assertEquals(CreationStep.SUMMARY, game.step())
         game.say("Werdegang ändern")
         assertEquals(CreationStep.CAREER, game.step())
@@ -121,16 +121,16 @@ class CharacterCreatorTest {
         // Only the changed choice is asked again.
         assertEquals(CreationStep.SUMMARY, game.step())
         assertEquals("artisan", game.state.creation!!.career)
-        // Changing to a human asks for the extras.
+        // Changing to the Smooth asks for the extras.
         game.say("Volk ändern")
-        game.say("Mensch")
+        game.say("Glatte")
         assertEquals(CreationStep.TRAITS, game.step())
     }
 
     @Test
     fun `every suggestion during creation is understood`() {
         val game = newGame()
-        val answers = listOf("weiblich", "Ida", "Mensch", "Künstlerin", "Grenzlandflüchtling", "vorschlag", "fertig", "Flink", "Zäh", "Religion")
+        val answers = listOf("weiblich", "Ida", "Glatte", "Künstlerin", "Grenzlandflüchtling", "vorschlag", "fertig", "Flink", "Zäh", "Religion")
         for (answer in answers) {
             val creation = requireNotNull(game.state.creation)
             for (suggestion in game.suggestions(Language.DE)) {
